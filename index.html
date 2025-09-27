@@ -4,29 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Study Planner - Boost Your Academic Performance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --accent: #4cc9f0;
-            --light: #f8f9fa;
+            --primary: #00BFFF; /* Sky Blue */
+            --secondary: #FF69B4; /* Pink */
+            --accent: #FFEB3B; /* Lemon Yellow */
+            --light: #FFFFFF; /* White */
             --dark: #212529;
             --success: #4ade80;
             --warning: #f59e0b;
             --danger: #ef4444;
             --gray: #6c757d;
-            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-bg: rgba(255, 255, 255, 0.95);
             --text: #333;
             --shadow: rgba(0, 0, 0, 0.1);
         }
 
         .dark-mode {
-            --primary: #5a75f0;
+            --primary: #00BFFF;
             --secondary: #4a1bc5;
             --accent: #5fd4f8;
             --light: #1a1a1a;
             --dark: #f8f9fa;
-            --card-bg: rgba(30, 30, 30, 0.9);
+            --card-bg: rgba(30, 30, 30, 0.95);
             --text: #f0f0f0;
             --shadow: rgba(255, 255, 255, 0.05);
         }
@@ -40,7 +41,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #00BFFF 0%, #FF69B4 100%);
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
@@ -149,16 +150,17 @@
         }
 
         .logo {
-            width: 40px;
-            height: 40px;
-            background: var(--primary);
-            border-radius: 50%;
+            width: 80px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+            border-radius: 10%;
         }
 
         .logo-text {
@@ -209,6 +211,55 @@
             background: var(--secondary);
         }
 
+        /* Banner Section */
+        .banner {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            text-align: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .banner-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--gray);
+        }
+
         /* Main Content */
         .container {
             max-width: 1200px;
@@ -225,7 +276,7 @@
 
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
         }
 
@@ -235,6 +286,11 @@
             padding: 1.5rem;
             box-shadow: 0 4px 6px var(--shadow);
             backdrop-filter: blur(10px);
+            min-height: 300px;
+        }
+
+        .card-full {
+            grid-column: 1 / -1;
         }
 
         .card-header {
@@ -421,12 +477,90 @@
             border-radius: 4px;
         }
 
+        /* Study Resources Section */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .resource-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .resource-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .resource-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .resource-card p {
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        /* Features Section */
+        .features-section {
+            margin-top: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+            background: rgba(0, 191, 255, 0.1);
+            padding: 0.75rem;
+            border-radius: 50%;
+        }
+
+        .feature-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .feature-content p {
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
         /* Footer */
         footer {
             background-color: var(--card-bg);
             backdrop-filter: blur(10px);
             padding: 2rem 2rem 1rem;
-            margin-top: 3rem;
+            margin-top: 1rem;
             box-shadow: 0 -4px 6px var(--shadow);
         }
 
@@ -441,29 +575,24 @@
         .footer-section {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 2rem;
         }
 
         .footer-logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 1rem;
+            
         }
 
-        .footer-logo .logo {
-            width: 50px;
-            height: 50px;
-            font-size: 1.5rem;
-        }
 
         .footer-logo .logo-text {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
         }
 
         .footer-about {
             line-height: 1.6;
             color: var(--gray);
+            max-width:400px;
         }
 
         .footer-heading {
@@ -526,6 +655,7 @@
             color: var(--text);
             font-size: 1.2rem;
             transition: color 0.2s;
+            text-decoration: none;
         }
 
         .social-links a:hover {
@@ -540,6 +670,16 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .card-full {
+                grid-column: 1 / -1;
+            }
+        }
+        
         @media (max-width: 768px) {
             .dashboard-grid {
                 grid-template-columns: 1fr;
@@ -556,6 +696,11 @@
                 justify-content: center;
             }
             
+            .banner-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
             .footer-content {
                 grid-template-columns: 1fr;
             }
@@ -564,6 +709,56 @@
                 flex-direction: column;
                 text-align: center;
             }
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr; /* 4 proper columns */
+            align-items: flex-start; /* Align all sections to the top */
+            gap: 2rem;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem; /* reduce gap to keep things tight */
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo .logo img {
+            width: 70px;   /* reduce size for better balance */
+            height: auto;
+            margin-bottom:0;
+        }
+        .footer-section, .footer-logo .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+
+        .footer-logo .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.2;
+            justify-content: flex-start;
+        }
+        .footer-logo {
+            display: flex;
+            margin-bottom: 0;
         }
     </style>
 </head>
@@ -580,15 +775,16 @@
     <!-- Header -->
     <header>
         <a href="index.html" class="logo-container">
-            <div class="logo"><img src="logo.png" height="60" width="80"></div>
+            <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+            <div class="logo-text">Smart Study Planner</div>
         </a>
         <nav class="nav-links">
             <a href="index.html">Dashboard</a>
             <a href="about.html">About Us</a>
-            <a href="#">My Tasks</a>
-            <a href="#">Study Goals</a>
-            <a href="#">Resources</a>
-            <a href="#">Progress</a>
+            <a href="tasks.html">My Tasks</a>
+            <a href="goals.html">Study Goals</a>
+            <a href="resources.html">Resources</a>
+            <a href="progress.html">Progress</a>
         </nav>
         <div class="nav-controls">
             <button class="theme-toggle" id="themeToggle">
@@ -596,6 +792,28 @@
             </button>
         </div>
     </header>
+
+    <!-- Banner Section -->
+    <div class="container">
+        <div class="banner">
+            <h1>Smart Study Planner</h1>
+            <p>Organize your academic life, track your progress, and achieve your goals with our intelligent study planning platform designed for students of all levels.</p>
+            <div class="banner-stats">
+                <div class="stat-item">
+                    <div class="stat-number">5,000+</div>
+                    <div class="stat-label">Active Students</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Support Available</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <div class="container">
@@ -656,13 +874,110 @@
             </div>
 
             <!-- Progress Timeline Card -->
-            <div class="card">
+            <div class="card card-full">
                 <div class="card-header">
                     <h2 class="card-title">Progress Timeline</h2>
                 </div>
                 <div class="timeline" id="progressTimeline">
                     <!-- Progress items will be dynamically added here -->
                     <div class="empty-state">No progress to display yet</div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <!-- Study Resources Section -->
+        <div class="resources-section">
+            <h2 class="dashboard-title">Study Resources</h2>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3>Study Guides</h3>
+                    <p>Comprehensive guides for various subjects to help you master difficult concepts.</p>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>Video Tutorials</h3>
+                    <p>Engaging video content to supplement your learning and understanding.</p>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>Practice Tests</h3>
+                    <p>Test your knowledge with our extensive collection of practice questions.</p>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Progress Analytics</h3>
+                    <p>Track your performance and identify areas for improvement.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features-section">
+            <h2 class="dashboard-title">Why Choose Smart Study Planner?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Smart Scheduling</h3>
+                        <p>Our AI-powered algorithm creates personalized study schedules based on your goals, deadlines, and learning patterns.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Smart Reminders</h3>
+                        <p>Never miss a deadline with our intelligent reminder system that adapts to your study habits.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Progress Tracking</h3>
+                        <p>Visualize your academic journey with detailed progress reports and analytics.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Mobile Friendly</h3>
+                        <p>Access your study plan anywhere, anytime with our responsive mobile interface.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Collaborative Study</h3>
+                        <p>Connect with classmates, form study groups, and share resources seamlessly.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Gamified Learning</h3>
+                        <p>Earn badges and rewards as you complete tasks and achieve your study goals.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -673,8 +988,8 @@
         <div class="footer-content">
             <div class="footer-section">
                 <div class="footer-logo">
-                    <div class="logo"><img src="logo.png" height="60" width="80"></div>
-                    <div class="logo-text">       Smart Study Planner</div>
+                    <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+                    <div class="logo-text">Smart Study Planner</div>
                 </div>
                 <p class="footer-about">
                     Smart Study Planner is an innovative tool designed to help students organize their academic life efficiently. 
@@ -686,37 +1001,37 @@
             <div class="footer-section">
                 <h3 class="footer-heading">Quick Links</h3>
                 <div class="footer-links">
-                    <a href="#">About Us</a>
-                    <a href="#">Features</a>
-                    <a href="#">Pricing</a>
-                    <a href="#">Testimonials</a>
-                    <a href="#">Blog</a>
+                    <a href="about.html">About Us</a>
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="testimonials.html">Testimonials</a>
+                    <a href="blog.html">Blog</a>
                 </div>
             </div>
             
             <div class="footer-section">
                 <h3 class="footer-heading">Resources</h3>
                 <div class="footer-links">
-                    <a href="#">Study Tips</a>
-                    <a href="#">Time Management</a>
-                    <a href="#">Productivity Tools</a>
-                    <a href="#">Academic Resources</a>
-                    <a href="#">Support Center</a>
+                    <a href="studytips.html">Study Tips</a>
+                    <a href="time.html">Time Management</a>
+                    <a href="productivity.html">Productivity Tools</a>
+                    <a href="academic.html">Academic Resources</a>
+                    <a href="support.html">Support Center</a>
                 </div>
             </div>
             
             <div class="footer-section">
                 <h3 class="footer-heading">Contact Us</h3>
                 <div class="footer-contact">
-                    <p>📧 info@smartstudyplanner.com</p>
-                    <p>📞 +1 (555) 123-4567</p>
-                    <p>📍 123 Education Street, Learning City</p>
+                    <p><i class="fas fa-envelope"></i> info@smartstudyplanner.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
                 </div>
                 <div class="social-links">
-                    <a href="#">📘</a>
-                    <a href="#">🐦</a>
-                    <a href="#">📷</a>
-                    <a href="#">💼</a>
+                    <a href="www.facebook.com" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="www.twitter.com" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="www.instagram.com" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="www.linkedin.com" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
                 </div>
             </div>
         </div>
@@ -726,9 +1041,9 @@
                 &copy; 2025 Smart Study Planner. All rights reserved.
             </div>
             <div class="footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Cookie Policy</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="cookie.html">Cookie Policy</a>
             </div>
         </div>
     </footer>
