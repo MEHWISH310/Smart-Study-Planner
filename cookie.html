@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Policy - Smart Study Planner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00BFFF; /* Sky Blue */
+            --secondary: #FF69B4; /* Pink */
+            --accent: #FFEB3B; /* Lemon Yellow */
+            --light: #FFFFFF; /* White */
+            --dark: #212529;
+            --success: #4ade80;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray: #6c757d;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #333;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            --primary: #00BFFF;
+            --secondary: #4a1bc5;
+            --accent: #5fd4f8;
+            --light: #1a1a1a;
+            --dark: #f8f9fa;
+            --card-bg: rgba(30, 30, 30, 0.95);
+            --text: #f0f0f0;
+            --shadow: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background: linear-gradient(135deg, #00BFFF 0%, #FF69B4 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .dark-mode body {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        }
+
+        /* Floating Background Objects */
+        .floating-objects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-object {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        .floating-object:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-duration: 20s;
+        }
+
+        .floating-object:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-duration: 25s;
+        }
+
+        .floating-object:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 20%;
+            animation-duration: 15s;
+        }
+
+        .floating-object:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 30%;
+            left: 70%;
+            animation-duration: 30s;
+        }
+
+        .floating-object:nth-child(5) {
+            width: 70px;
+            height: 70px;
+            top: 50%;
+            left: 40%;
+            animation-duration: 18s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(20px, 40px) rotate(90deg);
+            }
+            50% {
+                transform: translate(40px, 0) rotate(180deg);
+            }
+            75% {
+                transform: translate(20px, -40px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 80px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+            border-radius: 10%;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        .theme-toggle:hover {
+            background: var(--secondary);
+        }
+
+        /* Banner Section */
+        .banner {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            text-align: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .card-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Cookie Content */
+        .cookie-content {
+            line-height: 1.6;
+        }
+
+        .cookie-section {
+            margin-bottom: 2rem;
+        }
+
+        .cookie-section h3 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .cookie-section p, .cookie-section ul {
+            margin-bottom: 1rem;
+        }
+
+        .cookie-section ul {
+            padding-left: 1.5rem;
+        }
+
+        .cookie-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight {
+            background-color: rgba(0, 191, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            margin: 1.5rem 0;
+        }
+
+        .contact-box {
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .dark-mode .contact-box {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .contact-box h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Cookie Table */
+        .cookie-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .cookie-table th, .cookie-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .cookie-table th, 
+        .dark-mode .cookie-table td {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cookie-table th {
+            background-color: rgba(0, 191, 255, 0.1);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .dark-mode .cookie-table th {
+            background-color: rgba(0, 191, 255, 0.2);
+        }
+
+        .cookie-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .dark-mode .cookie-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Cookie Controls */
+        .cookie-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .cookie-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .cookie-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .cookie-btn.secondary {
+            background: var(--gray);
+        }
+
+        .cookie-btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 2rem 2rem 1rem;
+            margin-top: 1rem;
+            box-shadow: 0 -4px 6px var(--shadow);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo .logo img {
+            width: 70px;
+            height: auto;
+            margin-bottom: 0;
+        }
+
+        .footer-logo .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .footer-about {
+            line-height: 1.6;
+            color: var(--gray);
+            max-width: 400px;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-contact p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dark-mode .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text);
+            font-size: 1.2rem;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .mission-content {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .cookie-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Objects -->
+    <div class="floating-objects">
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo-container">
+            <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+            <div class="logo-text">Smart Study Planner</div>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html">Dashboard</a>
+            <a href="about.html">About</a>
+            <a href="tasks.html">My Tasks</a>
+            <a href="#">Study Goals</a>
+            <a href="#">Resources</a>
+            <a href="#">Progress</a>
+        </nav>
+        <div class="nav-controls">
+            <button class="theme-toggle" id="themeToggle">
+                <span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Banner Section -->
+    <div class="container">
+        <div class="banner">
+            <h1>Cookie Policy</h1>
+            <p>This Cookie Policy explains how Smart Study Planner uses cookies and similar technologies to recognize you when you visit our website and application.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">Our Use of Cookies</h1>
+        
+        <!-- Introduction -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">What Are Cookies?</h2>
+            </div>
+            <div class="cookie-content">
+                <div class="cookie-section">
+                    <p>Cookies are small text files that are placed on your computer or mobile device when you visit a website or use an application. They are widely used to make websites work more efficiently and provide information to the owners of the site.</p>
+                    <p>Cookies can be "persistent" or "session" cookies. Persistent cookies remain on your personal computer or mobile device when you go offline, while session cookies are deleted as soon as you close your web browser.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How We Use Cookies -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">How We Use Cookies</h2>
+            </div>
+            <div class="cookie-content">
+                <div class="cookie-section">
+                    <p>Smart Study Planner uses cookies for several purposes, including:</p>
+                    <ul>
+                        <li><strong>Essential Cookies:</strong> These are necessary for the website to function and cannot be switched off in our systems.</li>
+                        <li><strong>Performance Cookies:</strong> These allow us to count visits and traffic sources so we can measure and improve the performance of our site.</li>
+                        <li><strong>Functional Cookies:</strong> These enable the website to provide enhanced functionality and personalization.</li>
+                        <li><strong>Targeting Cookies:</strong> These may be set through our site by our advertising partners to build a profile of your interests.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Types of Cookies -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Types of Cookies We Use</h2>
+            </div>
+            <div class="cookie-content">
+                <div class="cookie-section">
+                    <p>The table below explains the types of cookies we use and why we use them:</p>
+                    
+                    <table class="cookie-table">
+                        <thead>
+                            <tr>
+                                <th>Cookie Type</th>
+                                <th>Purpose</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Authentication Cookies</strong></td>
+                                <td>To identify you when you visit our website and as you navigate our website</td>
+                                <td>Session / Persistent</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Preferences Cookies</strong></td>
+                                <td>To store information about your preferences and to personalize the website for you</td>
+                                <td>Persistent (1 year)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Security Cookies</strong></td>
+                                <td>As a security measure to protect user accounts</td>
+                                <td>Session</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Analytics Cookies</strong></td>
+                                <td>To help us understand how visitors interact with our website</td>
+                                <td>Persistent (2 years)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Advertising Cookies</strong></td>
+                                <td>To make advertising messages more relevant to you</td>
+                                <td>Persistent (1 year)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Third-Party Cookies -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Third-Party Cookies</h2>
+            </div>
+            <div class="cookie-content">
+                <div class="cookie-section">
+                    <p>In addition to our own cookies, we may also use various third-party cookies to report usage statistics of the service, deliver advertisements on and through the service, and so on.</p>
+                    <p>These third-party services may include:</p>
+                    <ul>
+                        <li><strong>Google Analytics:</strong> To understand how visitors interact with our website</li>
+                        <li><strong>Google AdWords:</strong> For advertising and remarketing purposes</li>
+                        <li><strong>Social Media Platforms:</strong> For social media integration and sharing</li>
+                        <li><strong>Payment Processors:</strong> For secure payment processing</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight">
+                    <p><strong>Note:</strong> We do not have control over third-party cookies. You should check the respective privacy policies of these third-party providers for more detailed information on their cookies.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Your Choices -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Your Choices Regarding Cookies</h2>
+            </div>
+            <div class="cookie-content">
+                <div class="cookie-section">
+                    <p>You have several options to control or limit how we and our partners use cookies:</p>
+                    <ul>
+                        <li><strong>Browser Controls:</strong> Most web browsers allow you to control cookies through their settings preferences. However, limiting cookies may affect your ability to use certain features of our website.</li>
+                        <li><strong>Opt-Out Tools:</strong> You can opt out of certain types of cookies, particularly those used for targeted advertising, through industry opt-out tools.</li>
+                        <li><strong>Do Not Track:</strong> Some browsers have a "Do Not Track" feature that lets you tell websites you do not want to have your online activities tracked.</li>
+                    </ul>
+                </div>
+                
+                <div class="cookie-controls">
+                    <button class="cookie-btn" id="acceptAll">Accept All Cookies</button>
+                    <button class="cookie-btn secondary" id="essentialOnly">Essential Cookies Only</button>
+                    <button class="cookie-btn secondary" id="rejectAll">Reject All Cookies</button>
+                </div>
+                
+                <div class="cookie-section">
+                    <p>Your current cookie preferences: <strong id="cookieStatus">Not set</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Managing Cookies -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Managing Cookies</h2>
+            </div>
+            <div class="cookie-content">
+                <div class="cookie-section">
+                    <p>You can manage cookies through your web browser settings. The "Help" feature on most browsers will tell you how to:</p>
+                    <ul>
+                        <li>Prevent your browser from accepting new cookies</li>
+                        <li>Have the browser notify you when you receive a new cookie</li>
+                        <li>Disable cookies altogether</li>
+                        <li>Delete cookies that have already been set</li>
+                    </ul>
+                </div>
+                
+                <div class="cookie-section">
+                    <p>If you'd like to delete cookies or instruct your web browser to delete or refuse cookies, please visit the help pages of your web browser:</p>
+                    <ul>
+                        <li><a href="https://support.google.com/chrome/answer/95647" target="_blank">Google Chrome</a></li>
+                        <li><a href="https://support.mozilla.org/en-US/kb/enable-and-disable-cookies-website-preferences" target="_blank">Mozilla Firefox</a></li>
+                        <li><a href="https://support.apple.com/guide/safari/manage-cookies-and-website-data-sfri11471/mac" target="_blank">Safari</a></li>
+                        <li><a href="https://support.microsoft.com/en-us/windows/delete-and-manage-cookies-168dab11-0753-043d-7c16-ede5947fc64d" target="_blank">Microsoft Edge</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Updates -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Updates to This Cookie Policy</h2>
+            </div>
+            <div class="cookie-content">
+                <div class="cookie-section">
+                    <p>We may update this Cookie Policy from time to time to reflect changes in technology, legislation, or our data practices. We will notify you of any material changes by posting the new Cookie Policy on this page and updating the "Last Updated" date.</p>
+                    <p>We encourage you to review this Cookie Policy periodically to stay informed about our use of cookies and related technologies.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Contact Us</h2>
+            </div>
+            <div class="cookie-content">
+                <div class="cookie-section">
+                    <p>If you have any questions about our use of cookies or other technologies, please contact us:</p>
+                </div>
+                <div class="contact-box">
+                    <h3>Smart Study Planner Privacy Team</h3>
+                    <p><i class="fas fa-envelope"></i> privacy@smartstudyplanner.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
+                </div><br>
+                <div class="cookie-section">
+                <p><strong>Last Updated:</strong> <span id="last-updated"></span></p>
+                </div>
+
+                <script>
+                    const today = new Date();
+                    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                    document.getElementById('last-updated').textContent = today.toLocaleDateString('en-US', options);
+                </script>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+                    <div class="logo-text">Smart Study Planner</div>
+                </div>
+                <p class="footer-about">
+                    Smart Study Planner is an innovative tool designed to help students organize their academic life efficiently. 
+                    With intuitive task management, progress tracking, and smart reminders, our platform empowers students to 
+                    achieve their academic goals while maintaining a healthy study-life balance.
+                </p>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Quick Links</h3>
+                <div class="footer-links">
+                    <a href="about.html">About Us</a>
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="testimonials.html">Testimonials</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Resources</h3>
+                <div class="footer-links">
+                    <a href="studytips.html">Study Tips</a>
+                    <a href="time.html">Time Management</a>
+                    <a href="productivity.html">Productivity Tools</a>
+                    <a href="academic.html">Academic Resources</a>
+                    <a href="support.html">Support Center</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Contact Us</h3>
+                <div class="footer-contact">
+                    <p><i class="fas fa-envelope"></i> info@smartstudyplanner.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
+                </div>
+                <div class="social-links">
+                    <a href="www.facebook.com" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="www.twitter.com" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="www.instagram.com" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="www.linkedin.com" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; 2025 Smart Study Planner. All rights reserved.
+            </div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="cookie.html" style="color: var(--primary);">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+        
+        // Cookie Controls
+        const acceptAllBtn = document.getElementById('acceptAll');
+        const essentialOnlyBtn = document.getElementById('essentialOnly');
+        const rejectAllBtn = document.getElementById('rejectAll');
+        const cookieStatus = document.getElementById('cookieStatus');
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            }
+            saveToLocalStorage('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+
+        // Cookie Preference Functions
+        acceptAllBtn.addEventListener('click', () => {
+            saveToLocalStorage('cookiePref', 'all');
+            cookieStatus.textContent = 'All cookies accepted';
+            showCookieMessage('All cookies have been accepted. Thank you!');
+        });
+
+        essentialOnlyBtn.addEventListener('click', () => {
+            saveToLocalStorage('cookiePref', 'essential');
+            cookieStatus.textContent = 'Essential cookies only';
+            showCookieMessage('Only essential cookies will be used.');
+        });
+
+        rejectAllBtn.addEventListener('click', () => {
+            saveToLocalStorage('cookiePref', 'none');
+            cookieStatus.textContent = 'All cookies rejected';
+            showCookieMessage('All non-essential cookies have been rejected.');
+        });
+
+        // Load saved preferences
+        const savedTheme = getFromLocalStorage('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.textContent = '☀️';
+            themeText.textContent = 'Light Mode';
+        }
+
+        const savedCookiePref = getFromLocalStorage('cookiePref');
+        if (savedCookiePref) {
+            cookieStatus.textContent = 
+                savedCookiePref === 'all' ? 'All cookies accepted' :
+                savedCookiePref === 'essential' ? 'Essential cookies only' :
+                'All cookies rejected';
+        }
+
+        // Utility functions
+        function saveToLocalStorage(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function getFromLocalStorage(key) {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : null;
+        }
+
+        function showCookieMessage(message) {
+            // Create a temporary notification
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.position = 'fixed';
+            notification.style.bottom = '20px';
+            notification.style.right = '20px';
+            notification.style.backgroundColor = 'var(--primary)';
+            notification.style.color = 'white';
+            notification.style.padding = '10px 20px';
+            notification.style.borderRadius = '6px';
+            notification.style.zIndex = '1000';
+            notification.style.boxShadow = '0 4px 6px var(--shadow)';
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
