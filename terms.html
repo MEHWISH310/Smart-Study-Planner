@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Smart Study Planner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00BFFF; /* Sky Blue */
+            --secondary: #FF69B4; /* Pink */
+            --accent: #FFEB3B; /* Lemon Yellow */
+            --light: #FFFFFF; /* White */
+            --dark: #212529;
+            --success: #4ade80;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray: #6c757d;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #333;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            --primary: #00BFFF;
+            --secondary: #4a1bc5;
+            --accent: #5fd4f8;
+            --light: #1a1a1a;
+            --dark: #f8f9fa;
+            --card-bg: rgba(30, 30, 30, 0.95);
+            --text: #f0f0f0;
+            --shadow: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background: linear-gradient(135deg, #00BFFF 0%, #FF69B4 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .dark-mode body {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        }
+
+        /* Floating Background Objects */
+        .floating-objects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-object {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        .floating-object:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-duration: 20s;
+        }
+
+        .floating-object:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-duration: 25s;
+        }
+
+        .floating-object:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 20%;
+            animation-duration: 15s;
+        }
+
+        .floating-object:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 30%;
+            left: 70%;
+            animation-duration: 30s;
+        }
+
+        .floating-object:nth-child(5) {
+            width: 70px;
+            height: 70px;
+            top: 50%;
+            left: 40%;
+            animation-duration: 18s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(20px, 40px) rotate(90deg);
+            }
+            50% {
+                transform: translate(40px, 0) rotate(180deg);
+            }
+            75% {
+                transform: translate(20px, -40px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 80px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+            border-radius: 10%;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        .theme-toggle:hover {
+            background: var(--secondary);
+        }
+
+        /* Banner Section */
+        .banner {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            text-align: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .card-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Terms Content */
+        .terms-content {
+            line-height: 1.6;
+        }
+
+        .terms-section {
+            margin-bottom: 2rem;
+        }
+
+        .terms-section h3 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .terms-section p, .terms-section ul {
+            margin-bottom: 1rem;
+        }
+
+        .terms-section ul {
+            padding-left: 1.5rem;
+        }
+
+        .terms-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight {
+            background-color: rgba(0, 191, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            margin: 1.5rem 0;
+        }
+
+        .contact-box {
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .dark-mode .contact-box {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .contact-box h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 2rem 2rem 1rem;
+            margin-top: 1rem;
+            box-shadow: 0 -4px 6px var(--shadow);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo .logo img {
+            width: 70px;
+            height: auto;
+            margin-bottom: 0;
+        }
+
+        .footer-logo .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .footer-about {
+            line-height: 1.6;
+            color: var(--gray);
+            max-width: 400px;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-contact p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dark-mode .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text);
+            font-size: 1.2rem;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .mission-content {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Objects -->
+    <div class="floating-objects">
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo-container">
+            <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+            <div class="logo-text">Smart Study Planner</div>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html">Dashboard</a>
+            <a href="about.html">About</a>
+            <a href="tasks.html">My Tasks</a>
+            <a href="#">Study Goals</a>
+            <a href="#">Resources</a>
+            <a href="#">Progress</a>
+        </nav>
+        <div class="nav-controls">
+            <button class="theme-toggle" id="themeToggle">
+                <span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Banner Section -->
+    <div class="container">
+        <div class="banner">
+            <h1>Terms of Service</h1>
+            <p>Please read these Terms of Service carefully before using Smart Study Planner. By accessing or using our service, you agree to be bound by these Terms.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">Terms and Conditions</h1>
+        
+        <!-- Introduction -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Introduction</h2>
+            </div>
+            <div class="terms-content">
+                <div class="terms-section">
+                    <p>Welcome to Smart Study Planner. These Terms of Service ("Terms") govern your access to and use of our website, applications, and services (collectively, the "Service"). Please read these Terms carefully before using our Service.</p>
+                    <p>By accessing or using the Service, you agree to be bound by these Terms. If you disagree with any part of the Terms, you may not access the Service.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Terms -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Account Terms</h2>
+            </div>
+            <div class="terms-content">
+                <div class="terms-section">
+                    <h3>Account Creation</h3>
+                    <p>To use certain features of our Service, you must register for an account. When creating an account, you agree to:</p>
+                    <ul>
+                        <li>Provide accurate, current, and complete information</li>
+                        <li>Maintain and promptly update your account information</li>
+                        <li>Maintain the security of your password and accept all risks of unauthorized access</li>
+                        <li>Notify us immediately of any unauthorized use of your account</li>
+                        <li>Take responsibility for all activities that occur under your account</li>
+                    </ul>
+                </div>
+                
+                <div class="terms-section">
+                    <h3>Account Eligibility</h3>
+                    <p>You must be at least 13 years old to use our Service. If you are under 18, you represent that you have your parent or guardian's permission to use the Service and that they have read and agreed to these Terms on your behalf.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acceptable Use -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Acceptable Use</h2>
+            </div>
+            <div class="terms-content">
+                <div class="terms-section">
+                    <p>You agree not to use the Service to:</p>
+                    <ul>
+                        <li>Violate any applicable law or regulation</li>
+                        <li>Infringe upon the intellectual property rights of others</li>
+                        <li>Harass, abuse, or harm another person</li>
+                        <li>Transmit any viruses, malware, or other malicious code</li>
+                        <li>Attempt to gain unauthorized access to other accounts or systems</li>
+                        <li>Interfere with or disrupt the integrity or performance of the Service</li>
+                        <li>Collect or harvest any information from the Service without our permission</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight">
+                    <p><strong>Note:</strong> We reserve the right to suspend or terminate your account if we determine that you have violated these acceptable use terms.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Intellectual Property -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Intellectual Property</h2>
+            </div>
+            <div class="terms-content">
+                <div class="terms-section">
+                    <h3>Our Content</h3>
+                    <p>The Service and its original content, features, and functionality are owned by Smart Study Planner and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.</p>
+                </div>
+                
+                <div class="terms-section">
+                    <h3>Your Content</h3>
+                    <p>You retain ownership of any content you create, upload, or store within the Service. By using our Service, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, and display your content solely for the purpose of providing the Service to you.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payments and Subscriptions -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Payments and Subscriptions</h2>
+            </div>
+            <div class="terms-content">
+                <div class="terms-section">
+                    <p>Some features of our Service may require payment. By selecting a premium service, you agree to pay the specified fees. Payments are non-refundable except as required by law or as otherwise specifically permitted in our refund policy.</p>
+                    <p>Subscription services will automatically renew unless canceled before the renewal date. You may cancel your subscription at any time, but you will not receive a refund for any unused portion of the current billing period.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Termination -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Termination</h2>
+            </div>
+            <div class="terms-content">
+                <div class="terms-section">
+                    <p>We may terminate or suspend your account and access to the Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach these Terms.</p>
+                    <p>Upon termination, your right to use the Service will cease immediately. If you wish to terminate your account, you may simply discontinue using the Service or delete your account through the account settings.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disclaimer of Warranties -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Disclaimer of Warranties</h2>
+            </div>
+            <div class="terms-content">
+                <div class="terms-section">
+                    <p>The Service is provided on an "AS IS" and "AS AVAILABLE" basis. Smart Study Planner makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.</p>
+                    <p>We do not warrant that the Service will be uninterrupted, secure, or error-free, that defects will be corrected, or that the Service is free of viruses or other harmful components.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Limitation of Liability -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Limitation of Liability</h2>
+            </div>
+            <div class="terms-content">
+                <div class="terms-section">
+                    <p>In no event shall Smart Study Planner, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from:</p>
+                    <ul>
+                        <li>Your access to or use of or inability to access or use the Service</li>
+                        <li>Any conduct or content of any third party on the Service</li>
+                        <li>Any content obtained from the Service</li>
+                        <li>Unauthorized access, use or alteration of your transmissions or content</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Governing Law -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Governing Law</h2>
+            </div>
+            <div class="terms-content">
+                <div class="terms-section">
+                    <p>These Terms shall be governed and construed in accordance with the laws of the State of California, United States, without regard to its conflict of law provisions.</p>
+                    <p>Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights. If any provision of these Terms is held to be invalid or unenforceable by a court, the remaining provisions of these Terms will remain in effect.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Changes to Terms -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Changes to Terms</h2>
+            </div>
+            <div class="terms-content">
+                <div class="terms-section">
+                    <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.</p>
+                    <p>By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms. If you do not agree to the new terms, please stop using the Service.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Contact Us</h2>
+            </div>
+            <div class="terms-content">
+                <div class="terms-section">
+                    <p>If you have any questions about these Terms, please contact us:</p>
+                </div>
+                <div class="contact-box">
+                    <h3>Smart Study Planner Support Team</h3>
+                    <p><i class="fas fa-envelope"></i> support@smartstudyplanner.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
+                </div><br>
+                <div class="terms-section">
+                <p><strong>Last Updated:</strong> <span id="last-updated"></span></p>
+                </div>
+
+                <script>
+                    const today = new Date();
+                    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                    document.getElementById('last-updated').textContent = today.toLocaleDateString('en-US', options);
+                </script>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+                    <div class="logo-text">Smart Study Planner</div>
+                </div>
+                <p class="footer-about">
+                    Smart Study Planner is an innovative tool designed to help students organize their academic life efficiently. 
+                    With intuitive task management, progress tracking, and smart reminders, our platform empowers students to 
+                    achieve their academic goals while maintaining a healthy study-life balance.
+                </p>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Quick Links</h3>
+                <div class="footer-links">
+                    <a href="about.html">About Us</a>
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="testimonials.html">Testimonials</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Resources</h3>
+                <div class="footer-links">
+                    <a href="studytips.html">Study Tips</a>
+                    <a href="time.html">Time Management</a>
+                    <a href="productivity.html">Productivity Tools</a>
+                    <a href="academic.html">Academic Resources</a>
+                    <a href="support.html">Support Center</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Contact Us</h3>
+                <div class="footer-contact">
+                    <p><i class="fas fa-envelope"></i> info@smartstudyplanner.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
+                </div>
+                <div class="social-links">
+                    <a href="www.facebook.com" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="www.twitter.com" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="www.instagram.com" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="www.linkedin.com" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; 2025 Smart Study Planner. All rights reserved.
+            </div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html" style="color: var(--primary);">Terms of Service</a>
+                <a href="cookie.html">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            }
+            saveToLocalStorage('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+
+        // Load saved theme
+        const savedTheme = getFromLocalStorage('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.textContent = '☀️';
+            themeText.textContent = 'Light Mode';
+        }
+
+        // Utility functions
+        function saveToLocalStorage(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function getFromLocalStorage(key) {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : null;
+        }
+    </script>
+</body>
+</html>
