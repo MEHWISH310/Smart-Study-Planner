@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Resources - Smart Study Planner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00BFFF; /* Sky Blue */
+            --secondary: #FF69B4; /* Pink */
+            --accent: #FFEB3B; /* Lemon Yellow */
+            --light: #FFFFFF; /* White */
+            --dark: #212529;
+            --success: #4ade80;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray: #6c757d;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #333;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            --primary: #00BFFF;
+            --secondary: #4a1bc5;
+            --accent: #5fd4f8;
+            --light: #1a1a1a;
+            --dark: #f8f9fa;
+            --card-bg: rgba(30, 30, 30, 0.95);
+            --text: #f0f0f0;
+            --shadow: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background: linear-gradient(135deg, #00BFFF 0%, #FF69B4 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #23628d 0%, #8e3a64 100%);
+        }
+
+        /* Floating Background Objects */
+        .floating-objects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-object {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        .floating-object:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-duration: 20s;
+        }
+
+        .floating-object:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-duration: 25s;
+        }
+
+        .floating-object:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 20%;
+            animation-duration: 15s;
+        }
+
+        .floating-object:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 30%;
+            left: 70%;
+            animation-duration: 30s;
+        }
+
+        .floating-object:nth-child(5) {
+            width: 70px;
+            height: 70px;
+            top: 50%;
+            left: 40%;
+            animation-duration: 18s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(20px, 40px) rotate(90deg);
+            }
+            50% {
+                transform: translate(40px, 0) rotate(180deg);
+            }
+            75% {
+                transform: translate(20px, -40px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 80px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+            border-radius: 10%;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        .theme-toggle:hover {
+            background: var(--secondary);
+        }
+
+        /* Banner Section */
+        .banner {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            text-align: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .card-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Resources Section */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .resource-card {
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark-mode .resource-card {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px var(--shadow);
+        }
+
+        .resource-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            background: rgba(0, 191, 255, 0.1);
+            padding: 1rem;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .resource-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .resource-description {
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            color: var(--text);
+        }
+
+        .resource-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .resource-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.2s;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .resource-link {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .resource-link:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .link-icon {
+            font-size: 1.2rem;
+        }
+
+        .link-text {
+            flex: 1;
+        }
+
+        .link-arrow {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .resource-link:hover .link-arrow {
+            opacity: 1;
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 30px;
+            background-color: var(--light);
+            color: var(--text);
+            font-size: 1rem;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .dark-mode .search-input {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .search-btn {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-btn:hover {
+            background-color: var(--secondary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 2rem 2rem 1rem;
+            margin-top: 1rem;
+            box-shadow: 0 -4px 6px var(--shadow);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo .logo img {
+            width: 70px;
+            height: auto;
+            margin-bottom: 0;
+        }
+
+        .footer-logo .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .footer-about {
+            line-height: 1.6;
+            color: var(--gray);
+            max-width: 400px;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-contact p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dark-mode .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text);
+            font-size: 1.2rem;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .resources-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+            }
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Objects -->
+    <div class="floating-objects">
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo-container">
+            <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+            <div class="logo-text">Smart Study Planner</div>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html">Dashboard</a>
+            <a href="about.html">About</a>
+            <a href="tasks.html">My Tasks</a>
+            <a href="goals.html">Study Goals</a>
+            <a href="resources.html">Resources</a>
+            <a href="progress.html">Progress</a>
+        </nav>
+        <div class="nav-controls">
+            <a href="login.html" class="btn btn-outline" id="loginBtn">Login</a>
+            <a href="signup.html" class="btn btn-primary" id="signupBtn">Sign Up</a>
+            <button class="theme-toggle" id="themeToggle">
+                <span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Banner Section -->
+    <div class="container">
+        <div class="banner">
+            <h1>Academic Resources</h1>
+            <p>Discover a curated collection of high-quality learning resources across various academic domains. From web development to mathematics, find the perfect tools to enhance your learning journey.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">Learning Resources</h1>
+        
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search for resources...">
+                <button class="search-btn">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </div>
+
+        <!-- Resources Grid -->
+        <div class="resources-grid" id="resourcesGrid">
+            <!-- Web Development -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h2 class="resource-title">Web Development</h2>
+                </div>
+                <p class="resource-description">
+                    Resources for learning front-end and back-end web development, including HTML, CSS, JavaScript, frameworks, and more.
+                </p>
+                <div class="resource-links">
+                    <a href="https://developer.mozilla.org" target="_blank" class="resource-link">
+                        <i class="fas fa-globe link-icon"></i>
+                        <span class="link-text">MDN Web Docs</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://freecodecamp.org" target="_blank" class="resource-link">
+                        <i class="fas fa-laptop-code link-icon"></i>
+                        <span class="link-text">freeCodeCamp</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://w3schools.com" target="_blank" class="resource-link">
+                        <i class="fas fa-school link-icon"></i>
+                        <span class="link-text">W3Schools</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://css-tricks.com" target="_blank" class="resource-link">
+                        <i class="fab fa-css3-alt link-icon"></i>
+                        <span class="link-text">CSS-Tricks</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mathematics -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">
+                        <i class="fas fa-square-root-alt"></i>
+                    </div>
+                    <h2 class="resource-title">Mathematics</h2>
+                </div>
+                <p class="resource-description">
+                    Comprehensive math resources from basic arithmetic to advanced calculus, statistics, and mathematical theory.
+                </p>
+                <div class="resource-links">
+                    <a href="https://khanacademy.org" target="_blank" class="resource-link">
+                        <i class="fas fa-chalkboard-teacher link-icon"></i>
+                        <span class="link-text">Khan Academy</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://wolframalpha.com" target="_blank" class="resource-link">
+                        <i class="fas fa-calculator link-icon"></i>
+                        <span class="link-text">Wolfram Alpha</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://brilliant.org" target="_blank" class="resource-link">
+                        <i class="fas fa-brain link-icon"></i>
+                        <span class="link-text">Brilliant</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://mathisfun.com" target="_blank" class="resource-link">
+                        <i class="fas fa-smile link-icon"></i>
+                        <span class="link-text">Math is Fun</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Science -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h2 class="resource-title">Science</h2>
+                </div>
+                <p class="resource-description">
+                    Explore biology, chemistry, physics, and other scientific disciplines with interactive resources and experiments.
+                </p>
+                <div class="resource-links">
+                    <a href="https://phet.colorado.edu" target="_blank" class="resource-link">
+                        <i class="fas fa-atom link-icon"></i>
+                        <span class="link-text">PhET Simulations</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://nasa.gov" target="_blank" class="resource-link">
+                        <i class="fas fa-rocket link-icon"></i>
+                        <span class="link-text">NASA Education</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://sciencebuddies.org" target="_blank" class="resource-link">
+                        <i class="fas fa-microscope link-icon"></i>
+                        <span class="link-text">Science Buddies</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://ck12.org" target="_blank" class="resource-link">
+                        <i class="fas fa-book-open link-icon"></i>
+                        <span class="link-text">CK-12 Foundation</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Languages -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h2 class="resource-title">Languages</h2>
+                </div>
+                <p class="resource-description">
+                    Learn new languages with interactive courses, vocabulary builders, grammar guides, and conversation practice.
+                </p>
+                <div class="resource-links">
+                    <a href="https://duolingo.com" target="_blank" class="resource-link">
+                        <i class="fas fa-dove link-icon"></i>
+                        <span class="link-text">Duolingo</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://memrise.com" target="_blank" class="resource-link">
+                        <i class="fas fa-seedling link-icon"></i>
+                        <span class="link-text">Memrise</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://bbc.co.uk/languages" target="_blank" class="resource-link">
+                        <i class="fas fa-broadcast-tower link-icon"></i>
+                        <span class="link-text">BBC Languages</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://conjuguemos.com" target="_blank" class="resource-link">
+                        <i class="fas fa-book link-icon"></i>
+                        <span class="link-text">Conjuguemos</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Computer Science -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h2 class="resource-title">Computer Science</h2>
+                </div>
+                <p class="resource-description">
+                    Resources for learning algorithms, data structures, programming languages, and computer science fundamentals.
+                </p>
+                <div class="resource-links">
+                    <a href="https://coursera.org" target="_blank" class="resource-link">
+                        <i class="fas fa-graduation-cap link-icon"></i>
+                        <span class="link-text">Coursera</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://edx.org" target="_blank" class="resource-link">
+                        <i class="fas fa-university link-icon"></i>
+                        <span class="link-text">edX</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://geeksforgeeks.org" target="_blank" class="resource-link">
+                        <i class="fas fa-code link-icon"></i>
+                        <span class="link-text">GeeksforGeeks</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://leetcode.com" target="_blank" class="resource-link">
+                        <i class="fas fa-puzzle-piece link-icon"></i>
+                        <span class="link-text">LeetCode</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Humanities -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">
+                        <i class="fas fa-monument"></i>
+                    </div>
+                    <h2 class="resource-title">Humanities</h2>
+                </div>
+                <p class="resource-description">
+                    Explore literature, history, philosophy, art, and cultural studies with comprehensive resources and analysis.
+                </p>
+                <div class="resource-links">
+                    <a href="https://projectgutenberg.org" target="_blank" class="resource-link">
+                        <i class="fas fa-book link-icon"></i>
+                        <span class="link-text">Project Gutenberg</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://crashcourse.com" target="_blank" class="resource-link">
+                        <i class="fas fa-tv link-icon"></i>
+                        <span class="link-text">Crash Course</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://stanford.edu/class/ihum" target="_blank" class="resource-link">
+                        <i class="fas fa-landmark link-icon"></i>
+                        <span class="link-text">Stanford IHUM</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://metmuseum.org" target="_blank" class="resource-link">
+                        <i class="fas fa-palette link-icon"></i>
+                        <span class="link-text">Met Museum</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Business & Economics -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h2 class="resource-title">Business & Economics</h2>
+                </div>
+                <p class="resource-description">
+                    Learn about business management, economics, finance, marketing, and entrepreneurship with practical resources.
+                </p>
+                <div class="resource-links">
+                    <a href="https://investopedia.com" target="_blank" class="resource-link">
+                        <i class="fas fa-chart-bar link-icon"></i>
+                        <span class="link-text">Investopedia</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://khanacademy.org/economics-finance-domain" target="_blank" class="resource-link">
+                        <i class="fas fa-money-bill-wave link-icon"></i>
+                        <span class="link-text">Khan Academy Economics</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://coursera.org/business" target="_blank" class="resource-link">
+                        <i class="fas fa-briefcase link-icon"></i>
+                        <span class="link-text">Coursera Business</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://freakonomics.com" target="_blank" class="resource-link">
+                        <i class="fas fa-podcast link-icon"></i>
+                        <span class="link-text">Freakonomics</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Test Preparation -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h2 class="resource-title">Test Preparation</h2>
+                </div>
+                <p class="resource-description">
+                    Prepare for standardized tests, college entrance exams, and professional certifications with practice materials.
+                </p>
+                <div class="resource-links">
+                    <a href="https://collegeboard.org" target="_blank" class="resource-link">
+                        <i class="fas fa-pencil-alt link-icon"></i>
+                        <span class="link-text">College Board</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://khanacademy.org/sat" target="_blank" class="resource-link">
+                        <i class="fas fa-trophy link-icon"></i>
+                        <span class="link-text">Khan Academy SAT</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://ets.org" target="_blank" class="resource-link">
+                        <i class="fas fa-globe-americas link-icon"></i>
+                        <span class="link-text">ETS Official</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://princetonreview.com" target="_blank" class="resource-link">
+                        <i class="fas fa-university link-icon"></i>
+                        <span class="link-text">Princeton Review</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+                    <div class="logo-text">Smart Study Planner</div>
+                </div>
+                <p class="footer-about">
+                    Smart Study Planner is an innovative tool designed to help students organize their academic life efficiently. 
+                    With intuitive task management, progress tracking, and smart reminders, our platform empowers students to 
+                    achieve their academic goals while maintaining a healthy study-life balance.
+                </p>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Quick Links</h3>
+                <div class="footer-links">
+                    <a href="about.html">About Us</a>
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="testimonials.html">Testimonials</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Resources</h3>
+                <div class="footer-links">
+                    <a href="studytips.html">Study Tips</a>
+                    <a href="time.html">Time Management</a>
+                    <a href="productivity.html">Productivity Tools</a>
+                    <a href="academic.html">Academic Resources</a>
+                    <a href="support.html">Support Center</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Contact Us</h3>
+                <div class="footer-contact">
+                    <p><i class="fas fa-envelope"></i> info@smartstudyplanner.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
+                </div>
+                <div class="social-links">
+                    <a href="www.facebook.com" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="www.twitter.com" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="www.instagram.com" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="www.linkedin.com" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; 2025 Smart Study Planner. All rights reserved.
+            </div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="cookie.html">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+        const searchInput = document.querySelector('.search-input');
+        const searchBtn = document.querySelector('.search-btn');
+        const resourcesGrid = document.getElementById('resourcesGrid');
+        const resourceCards = document.querySelectorAll('.resource-card');
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            }
+            saveToLocalStorage('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+
+        // Search Functionality
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                // Show all cards if search is empty
+                resourceCards.forEach(card => {
+                    card.style.display = 'block';
+                });
+                return;
+            }
+            
+            // Filter cards based on search term
+            resourceCards.forEach(card => {
+                const title = card.querySelector('.resource-title').textContent.toLowerCase();
+                const description = card.querySelector('.resource-description').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Load saved theme
+        const savedTheme = getFromLocalStorage('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.textContent = '☀️';
+            themeText.textContent = 'Light Mode';
+        }
+
+        // Utility functions
+        function saveToLocalStorage(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function getFromLocalStorage(key) {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : null;
+        }
+    </script>
+</body>
+</html>

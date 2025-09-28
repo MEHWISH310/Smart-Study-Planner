@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - Smart Study Planner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00BFFF; /* Sky Blue */
+            --secondary: #FF69B4; /* Pink */
+            --accent: #FFEB3B; /* Lemon Yellow */
+            --light: #FFFFFF; /* White */
+            --dark: #212529;
+            --success: #4ade80;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray: #6c757d;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #333;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            --primary: #00BFFF;
+            --secondary: #4a1bc5;
+            --accent: #5fd4f8;
+            --light: #1a1a1a;
+            --dark: #f8f9fa;
+            --card-bg: rgba(30, 30, 30, 0.95);
+            --text: #f0f0f0;
+            --shadow: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background: linear-gradient(135deg, #00BFFF 0%, #FF69B4 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #23628d 0%, #8e3a64 100%);
+        }
+
+        /* Floating Background Objects */
+        .floating-objects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-object {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        .floating-object:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-duration: 20s;
+        }
+
+        .floating-object:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-duration: 25s;
+        }
+
+        .floating-object:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 20%;
+            animation-duration: 15s;
+        }
+
+        .floating-object:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 30%;
+            left: 70%;
+            animation-duration: 30s;
+        }
+
+        .floating-object:nth-child(5) {
+            width: 70px;
+            height: 70px;
+            top: 50%;
+            left: 40%;
+            animation-duration: 18s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(20px, 40px) rotate(90deg);
+            }
+            50% {
+                transform: translate(40px, 0) rotate(180deg);
+            }
+            75% {
+                transform: translate(20px, -40px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 80px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+            border-radius: 10%;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        .theme-toggle:hover {
+            background: var(--secondary);
+        }
+
+        /* Banner Section */
+        .banner {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            text-align: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .card-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark-mode .feature-card {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px var(--shadow);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .feature-description {
+            color: var(--text);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Feature Details Modal */
+        .feature-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: modalFadeIn 0.3s;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: var(--text);
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Feature Tabs */
+        .feature-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--light);
+            color: var(--text);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px var(--shadow);
+        }
+
+        .dark-mode .tab-btn {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .tab-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 2rem 2rem 1rem;
+            margin-top: 1rem;
+            box-shadow: 0 -4px 6px var(--shadow);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo .logo img {
+            width: 70px;
+            height: auto;
+            margin-bottom: 0;
+        }
+
+        .footer-logo .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .footer-about {
+            line-height: 1.6;
+            color: var(--gray);
+            max-width: 400px;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-contact p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dark-mode .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text);
+            font-size: 1.2rem;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .feature-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Objects -->
+    <div class="floating-objects">
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo-container">
+            <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+            <div class="logo-text">Smart Study Planner</div>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html">Dashboard</a>
+            <a href="about.html">About</a>
+            <a href="tasks.html">My Tasks</a>
+            <a href="goals.html">Study Goals</a>
+            <a href="resources.html">Resources</a>
+            <a href="progress.html">Progress</a>
+        </nav>
+        <div class="nav-controls">
+        <a href="login.html" class="btn btn-outline" id="loginBtn">Login</a>
+        <a href="signup.html" class="btn btn-primary" id="signupBtn">Sign Up</a>
+        <button class="theme-toggle" id="themeToggle">
+        <span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span>
+        </button>
+        </div>
+    </header>
+
+    <!-- Banner Section -->
+    <div class="container">
+        <div class="banner">
+            <h1>Smart Study Planner Features</h1>
+            <p>Discover all the powerful tools and features designed to help you organize your study schedule, track your progress, and achieve academic success.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">Explore Our Features</h1>
+        
+        <!-- Feature Tabs -->
+        <div class="feature-tabs">
+            <button class="tab-btn active" data-tab="all">All Features</button>
+            <button class="tab-btn" data-tab="planning">Planning</button>
+            <button class="tab-btn" data-tab="tracking">Tracking</button>
+            <button class="tab-btn" data-tab="resources">Resources</button>
+        </div>
+        
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <!-- Task Management -->
+            <div class="feature-card" data-category="planning" data-feature="task-management">
+                <div class="feature-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h3 class="feature-title">Task Management</h3>
+                <p class="feature-description">Organize your assignments, projects, and study sessions with our intuitive task management system.</p>
+            </div>
+            
+            <!-- Study Goals -->
+            <div class="feature-card" data-category="planning" data-feature="study-goals">
+                <div class="feature-icon">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                <h3 class="feature-title">Study Goals</h3>
+                <p class="feature-description">Set and track your academic goals with progress visualization and achievement milestones.</p>
+            </div>
+            
+            <!-- Progress Tracking -->
+            <div class="feature-card" data-category="tracking" data-feature="progress-tracking">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="feature-title">Progress Tracking</h3>
+                <p class="feature-description">Monitor your study progress with detailed analytics and visual reports.</p>
+            </div>
+            
+            <!-- Smart Reminders -->
+            <div class="feature-card" data-category="planning" data-feature="smart-reminders">
+                <div class="feature-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <h3 class="feature-title">Smart Reminders</h3>
+                <p class="feature-description">Never miss a deadline with customizable notifications and intelligent reminders.</p>
+            </div>
+            
+            <!-- Resource Library -->
+            <div class="feature-card" data-category="resources" data-feature="resource-library">
+                <div class="feature-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3 class="feature-title">Resource Library</h3>
+                <p class="feature-description">Access a curated collection of study materials, templates, and educational resources.</p>
+            </div>
+            
+            <!-- Study Timer -->
+            <div class="feature-card" data-category="tracking" data-feature="study-timer">
+                <div class="feature-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3 class="feature-title">Study Timer</h3>
+                <p class="feature-description">Use our Pomodoro timer and custom study sessions to maximize productivity.</p>
+            </div>
+            
+            <!-- Collaboration -->
+            <div class="feature-card" data-category="resources" data-feature="collaboration">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="feature-title">Collaboration</h3>
+                <p class="feature-description">Study with peers using shared calendars, group tasks, and collaborative features.</p>
+            </div>
+            
+            <!-- Mobile App -->
+            <div class="feature-card" data-category="tracking" data-feature="mobile-app">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3 class="feature-title">Mobile App</h3>
+                <p class="feature-description">Access your study planner on the go with our fully-featured mobile application.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Details Modal -->
+    <div class="feature-modal" id="featureModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal">&times;</button>
+            <div class="modal-icon" id="modalIcon"></div>
+            <h2 class="modal-title" id="modalTitle">Feature Title</h2>
+            <div id="modalDescription">
+                <!-- Feature details will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+                    <div class="logo-text">Smart Study Planner</div>
+                </div>
+                <p class="footer-about">
+                    Smart Study Planner is an innovative tool designed to help students organize their academic life efficiently. 
+                    With intuitive task management, progress tracking, and smart reminders, our platform empowers students to 
+                    achieve their academic goals while maintaining a healthy study-life balance.
+                </p>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Quick Links</h3>
+                <div class="footer-links">
+                    <a href="about.html">About Us</a>
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="testimonials.html">Testimonials</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Resources</h3>
+                <div class="footer-links">
+                    <a href="studytips.html">Study Tips</a>
+                    <a href="time.html">Time Management</a>
+                    <a href="productivity.html">Productivity Tools</a>
+                    <a href="academic.html">Academic Resources</a>
+                    <a href="support.html">Support Center</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Contact Us</h3>
+                <div class="footer-contact">
+                    <p><i class="fas fa-envelope"></i> info@smartstudyplanner.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
+                </div>
+                <div class="social-links">
+                    <a href="www.facebook.com" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="www.twitter.com" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="www.instagram.com" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="www.linkedin.com" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; 2025 Smart Study Planner. All rights reserved.
+            </div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="cookie.html">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const featureCards = document.querySelectorAll('.feature-card');
+        const featureModal = document.getElementById('featureModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalIcon = document.getElementById('modalIcon');
+        const modalDescription = document.getElementById('modalDescription');
+
+        // Feature data
+        const featureData = {
+            'task-management': {
+                title: 'Task Management',
+                icon: '<i class="fas fa-tasks"></i>',
+                description: `
+                    <p>Our comprehensive task management system helps you organize all your academic responsibilities in one place.</p>
+                    <br>
+                    <h4>Key Features:</h4>
+                    <ul>
+                        <li>Create and categorize tasks by subject, priority, and due date</li>
+                        <li>Set recurring tasks for regular study sessions</li>
+                        <li>Add detailed descriptions and attachments to tasks</li>
+                        <li>Drag-and-drop interface for easy organization</li>
+                        <li>Integration with your calendar for seamless scheduling</li>
+                    </ul>
+                    <br>
+                    <p>With our task management system, you'll never miss an assignment deadline or forget about an important study session again.</p>
+                `
+            },
+            'study-goals': {
+                title: 'Study Goals',
+                icon: '<i class="fas fa-bullseye"></i>',
+                description: `
+                    <p>Set clear academic objectives and track your progress toward achieving them with our goal-setting feature.</p>
+                    <br>
+                    <h4>Key Features:</h4>
+                    <ul>
+                        <li>Define short-term and long-term study goals</li>
+                        <li>Break down large goals into manageable milestones</li>
+                        <li>Visual progress tracking with completion percentages</li>
+                        <li>Celebrate achievements with digital badges and rewards</li>
+                        <li>Adjust goals as your priorities change</li>
+                    </ul>
+                    <br>
+                    <p>Stay motivated and focused on what matters most with our goal-oriented approach to studying.</p>
+                `
+            },
+            'progress-tracking': {
+                title: 'Progress Tracking',
+                icon: '<i class="fas fa-chart-line"></i>',
+                description: `
+                    <p>Gain insights into your study habits and academic performance with detailed analytics and visual reports.</p>
+                    <br>
+                    <h4>Key Features:</h4>
+                    <ul>
+                        <li>Visual charts showing study time distribution</li>
+                        <li>Performance metrics for different subjects</li>
+                        <li>Comparison of planned vs. actual study time</li>
+                        <li>Weekly and monthly progress summaries</li>
+                        <li>Exportable reports for sharing with teachers or tutors</li>
+                    </ul>
+                    <br>
+                    <p>Identify your strengths, weaknesses, and study patterns to continuously improve your academic performance.</p>
+                `
+            },
+            'smart-reminders': {
+                title: 'Smart Reminders',
+                icon: '<i class="fas fa-bell"></i>',
+                description: `
+                    <p>Never miss important deadlines or study sessions with our intelligent notification system.</p>
+                    <br>
+                    <h4>Key Features:</h4>
+                    <ul>
+                        <li>Customizable reminder timing for different types of tasks</li>
+                        <li>Multiple notification channels (in-app, email, push)</li>
+                        <li>Smart scheduling that considers your study patterns</li>
+                        <li>Priority-based reminders for urgent tasks</li>
+                        <li>Snooze and reschedule options for flexibility</li>
+                    </ul>
+                    <br>
+                    <p>Our smart reminders adapt to your schedule and study habits, ensuring you stay on track without feeling overwhelmed.</p>
+                `
+            },
+            'resource-library': {
+                title: 'Resource Library',
+                icon: '<i class="fas fa-book"></i>',
+                description: `
+                    <p>Access a curated collection of study materials, templates, and educational resources to enhance your learning.</p>
+                    <br>
+                    <h4>Key Features:</h4>
+                    <ul>
+                        <li>Subject-specific study guides and cheat sheets</li>
+                        <li>Note-taking templates for various learning styles</li>
+                        <li>Flashcard creator for efficient memorization</li>
+                        <li>Curated links to educational websites and videos</li>
+                        <li>Personal resource upload and organization</li>
+                    </ul>
+                    <br>
+                    <p>Save time searching for quality study materials and focus more on actual learning with our comprehensive resource library.</p>
+                `
+            },
+            'study-timer': {
+                title: 'Study Timer',
+                icon: '<i class="fas fa-clock"></i>',
+                description: `
+                    <p>Maximize your productivity with our customizable study timer based on proven techniques like the Pomodoro method.</p>
+                    <br>
+                    <h4>Key Features:</h4>
+                    <ul>
+                        <li>Pomodoro timer with customizable work/break intervals</li>
+                        <li>Session tracking and statistics</li>
+                        <li>Focus mode that minimizes distractions</li>
+                        <li>Background sounds to enhance concentration</li>
+                        <li>Goal setting for daily study time targets</li>
+                    </ul>
+                    <br>
+                    <p>Improve your focus and prevent burnout with our scientifically-backed study timer that promotes sustainable learning habits.</p>
+                `
+            },
+            'collaboration': {
+                title: 'Collaboration',
+                icon: '<i class="fas fa-users"></i>',
+                description: `
+                    <p>Study more effectively with peers using our collaborative features designed for group learning.</p>
+                    <br>
+                    <h4>Key Features:</h4>
+                    <ul>
+                        <li>Shared study calendars for group projects</li>
+                        <li>Group task assignment and tracking</li>
+                        <li>Discussion boards for subject-specific questions</li>
+                        <li>File sharing and collaborative note-taking</li>
+                        <li>Study group formation and management</li>
+                    </ul>
+                    <br>
+                    <p>Enhance your learning experience by collaborating with classmates, sharing resources, and holding each other accountable.</p>
+                `
+            },
+            'mobile-app': {
+                title: 'Mobile App',
+                icon: '<i class="fas fa-mobile-alt"></i>',
+                description: `
+                    <p>Take your study planner with you wherever you go with our fully-featured mobile application.</p>
+                    <br>
+                    <h4>Key Features:</h4>
+                    <ul>
+                        <li>Full synchronization with web platform</li>
+                        <li>Offline access to your study plans</li>
+                        <li>Mobile-optimized interface for easy navigation</li>
+                        <li>Push notifications for reminders and updates</li>
+                        <li>Quick-add features for capturing tasks on the go</li>
+                    </ul>
+                    <br>
+                    <p>Never be without your study plan again - our mobile app ensures you can stay organized and productive no matter where you are.</p>
+                `
+            }
+        };
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            }
+            saveToLocalStorage('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+
+        // Tab Functionality
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                tabBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                const category = btn.getAttribute('data-tab');
+                filterFeatures(category);
+            });
+        });
+
+        // Filter features by category
+        function filterFeatures(category) {
+            featureCards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'block';
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                } else {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        card.style.display = 'none';
+                    }, 300);
+                }
+            });
+        }
+
+        // Feature Card Click Handler
+        featureCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const feature = card.getAttribute('data-feature');
+                openFeatureModal(feature);
+            });
+        });
+
+        // Open Feature Modal
+        function openFeatureModal(feature) {
+            const data = featureData[feature];
+            if (data) {
+                modalTitle.textContent = data.title;
+                modalIcon.innerHTML = data.icon;
+                modalDescription.innerHTML = data.description;
+                featureModal.style.display = 'flex';
+            }
+        }
+
+        // Close Modal
+        closeModal.addEventListener('click', () => {
+            featureModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === featureModal) {
+                featureModal.style.display = 'none';
+            }
+        });
+
+        // Load saved theme
+        const savedTheme = getFromLocalStorage('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.textContent = '☀️';
+            themeText.textContent = 'Light Mode';
+        }
+
+        // Utility functions
+        function saveToLocalStorage(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function getFromLocalStorage(key) {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : null;
+        }
+    </script>
+</body>
+</html>
