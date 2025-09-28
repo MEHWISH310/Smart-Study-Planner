@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Smart Study Planner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00BFFF; /* Sky Blue */
+            --secondary: #FF69B4; /* Pink */
+            --accent: #FFEB3B; /* Lemon Yellow */
+            --light: #FFFFFF; /* White */
+            --dark: #212529;
+            --success: #4ade80;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray: #6c757d;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #333;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            --primary: #00BFFF;
+            --secondary: #FF69B4;
+            --accent: #5fd4f8;
+            --light: #1a1a1a;
+            --dark: #f8f9fa;
+            --card-bg: rgba(30, 30, 30, 0.95);
+            --text: #f0f0f0;
+            --shadow: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background: linear-gradient(135deg, #00BFFF 0%, #FF69B4 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #23628d 0%, #8e3a64 100%);
+        }
+        /* Floating Background Objects */
+        .floating-objects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-object {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        .floating-object:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-duration: 20s;
+        }
+
+        .floating-object:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-duration: 25s;
+        }
+
+        .floating-object:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 20%;
+            animation-duration: 15s;
+        }
+
+        .floating-object:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 30%;
+            left: 70%;
+            animation-duration: 30s;
+        }
+
+        .floating-object:nth-child(5) {
+            width: 70px;
+            height: 70px;
+            top: 50%;
+            left: 40%;
+            animation-duration: 18s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(20px, 40px) rotate(90deg);
+            }
+            50% {
+                transform: translate(40px, 0) rotate(180deg);
+            }
+            75% {
+                transform: translate(20px, -40px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 80px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+            border-radius: 10%;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        .theme-toggle:hover {
+            background: var(--secondary);
+        }
+
+        /* Banner Section */
+        .banner {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            text-align: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Blog Section */
+        .blog-section {
+            margin-top: 2rem;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            transition: all 0.5s ease;
+        }
+
+        .blog-grid.single-view {
+            grid-template-columns: 1fr;
+        }
+
+        .blog-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s, box-shadow 0.3s, opacity 0.5s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .blog-card.hidden {
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            transform: scale(0);
+        }
+
+        .blog-card.expanded {
+            grid-column: 1 / -1;
+            max-width: 100%;
+            opacity: 1;
+            height: auto;
+            margin: 0;
+            padding: 0;
+            transform: scale(1);
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px var(--shadow);
+        }
+
+        .blog-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .blog-card:hover .blog-image img {
+            transform: scale(1.05);
+        }
+
+        .blog-category {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .blog-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-date {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            line-height: 1.3;
+        }
+
+        .blog-excerpt {
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .blog-full-content {
+            display: none;
+            margin-top: 1rem;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .blog-card.expanded .blog-full-content {
+            display: block;
+        }
+
+        .blog-card.expanded .blog-excerpt {
+            display: none;
+        }
+
+        .read-more {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+            align-self: flex-start;
+            cursor: pointer;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .read-more:hover {
+            background: var(--secondary);
+        }
+
+        /* Newsletter Section */
+        .newsletter {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .newsletter h2 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .newsletter p {
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .newsletter-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .newsletter-input {
+            flex-grow: 1;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px 0 0 8px;
+            background-color: var(--light);
+            color: var(--text);
+        }
+
+        .dark-mode .newsletter-input {
+            border: 1px solid #444;
+        }
+
+        .newsletter-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .newsletter-btn:hover {
+            background: var(--secondary);
+        }
+
+        /* Blog Categories */
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .category-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-btn.active, .category-btn:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        /* Specific category hover colors */
+        .category-btn[data-category="all"]:hover,
+        .category-btn[data-category="study-tips"]:hover {
+            background: var(--secondary);
+            border-color: var(--secondary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 2rem 2rem 1rem;
+            margin-top: 1rem;
+            box-shadow: 0 -4px 6px var(--shadow);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo .logo img {
+            width: 70px;
+            height: auto;
+            margin-bottom: 0;
+        }
+
+        .footer-logo .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .footer-about {
+            line-height: 1.6;
+            color: var(--gray);
+            max-width: 400px;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-contact p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dark-mode .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text);
+            font-size: 1.2rem;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .newsletter-input {
+                border-radius: 8px;
+                margin-bottom: 0.5rem;
+            }
+            
+            .newsletter-btn {
+                border-radius: 8px;
+                padding: 0.75rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <!-- Floating Background Objects -->
+    <div class="floating-objects">
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo-container">
+            <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+            <div class="logo-text">Smart Study Planner</div>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html">Dashboard</a>
+            <a href="about.html">About Us</a>
+            <a href="tasks.html">My Tasks</a>
+            <a href="goals.html">Study Goals</a>
+            <a href="resources.html">Resources</a>
+            <a href="progress.html">Progress</a>
+            <a href="blog.html" style="background-color: var(--primary); color: white;">Blog</a>
+        </nav>
+        <div class="nav-controls">
+            <button class="theme-toggle" id="themeToggle">
+                <span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Banner Section -->
+    <div class="container">
+        <div class="banner">
+            <h1>Explore Our Latest Blogs</h1>
+            <p>Discover expert study tips, productivity hacks, and academic insights to supercharge your learning journey.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">Smart Study Planner Blog</h1>
+        
+        <!-- Blog Categories -->
+        <div class="categories">
+            <button class="category-btn active" data-category="all">All Articles</button>
+            <button class="category-btn" data-category="study-tips">Study Tips</button>
+            <button class="category-btn" data-category="productivity">Productivity</button>
+            <button class="category-btn" data-category="time-management">Time Management</button>
+            <button class="category-btn" data-category="motivation">Motivation</button>
+        </div>
+        
+        <!-- Blog Grid -->
+        <div class="blog-section">
+            <div class="blog-grid" id="blogGrid">
+                <!-- Blog Post 1 -->
+                <div class="blog-card" data-category="study-tips">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Effective Study Techniques">
+                        <span class="blog-category">Study Tips</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-date">March 15, 2025</div>
+                        <h3 class="blog-title">10 Effective Study Techniques That Actually Work</h3>
+                        <p class="blog-excerpt">Discover science-backed study methods that can help you retain information better and study more efficiently. From spaced repetition to the Feynman technique, learn how to maximize your learning potential.</p>
+                        <div class="blog-full-content">
+                            <h4>Spaced Repetition</h4>
+                            <p>This technique involves reviewing information at increasing intervals over time. It's based on the spacing effect, which shows that we remember information better when we study it multiple times over a longer period rather than cramming it all at once.</p>
+                            <h4>The Feynman Technique</h4>
+                            <p>Named after physicist Richard Feynman, this method involves explaining a concept in simple terms as if you were teaching it to someone else. If you can't explain it simply, you don't understand it well enough.</p>
+                            <h4>Active Recall</h4>
+                            <p>Instead of passively reading or highlighting, actively test yourself on the material. This forces your brain to retrieve information, strengthening neural pathways and improving long-term retention.</p>
+                            <h4>Interleaving</h4>
+                            <p>Instead of focusing on one topic for a long time, mix different subjects or types of problems. This helps your brain learn to differentiate between concepts and apply the right solution to each problem.</p>
+                            <h4>Elaboration</h4>
+                            <p>Connect new information to what you already know. Ask yourself questions about how and why things work, and find connections between different concepts.</p>
+                        </div><br>
+                        <button class="read-more">Read More</button>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 2 -->
+                <div class="blog-card" data-category="productivity">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Productivity Apps">
+                        <span class="blog-category">Productivity</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-date">March 10, 2025</div>
+                        <h3 class="blog-title">Top 5 Productivity Apps for Students in 2025</h3>
+                        <p class="blog-excerpt">Explore the latest apps that can help you stay organized, manage your time, and boost your academic performance. We've tested them so you don't have to!</p>
+                        <div class="blog-full-content">
+                            <h4>1. Smart Study Planner</h4>
+                            <p>Our very own app combines task management, goal setting, and progress tracking in one intuitive interface. With AI-powered suggestions and smart reminders, it helps you stay on top of your academic responsibilities.</p>
+                            <h4>2. FocusTime</h4>
+                            <p>This app implements the Pomodoro Technique with a modern twist. It includes customizable work/break intervals, detailed analytics, and integration with popular calendar apps.</p>
+                            <h4>3. NoteMaster Pro</h4>
+                            <p>Revolutionize your note-taking with this app that supports handwriting, typing, audio recording, and image insertion. Its powerful search function can even recognize text in your handwritten notes.</p>
+                            <h4>4. StudyGroup Connect</h4>
+                            <p>Collaborate effectively with classmates using this platform designed specifically for academic group work. Features include shared whiteboards, document collaboration, and scheduling tools.</p>
+                            <h4>5. MindMapper</h4>
+                            <p>Create beautiful, interactive mind maps to visualize complex concepts and relationships between ideas. Perfect for brainstorming, essay planning, and revision.</p>
+                        </div><br>
+                        <button class="read-more">Read More</button>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 3 -->
+                <div class="blog-card" data-category="time-management">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Time Management">
+                        <span class="blog-category">Time Management</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-date">March 5, 2025</div>
+                        <h3 class="blog-title">Mastering Time Management: The Pomodoro Technique Explained</h3>
+                        <p class="blog-excerpt">Learn how to implement the Pomodoro Technique to break your study sessions into manageable intervals, maintain focus, and prevent burnout.</p>
+                        <div class="blog-full-content">
+                            <h4>What is the Pomodoro Technique?</h4>
+                            <p>Developed by Francesco Cirillo in the late 1980s, the Pomodoro Technique is a time management method that uses a timer to break down work into intervals, traditionally 25 minutes in length, separated by short breaks.</p>
+                            <h4>How to Implement It</h4>
+                            <p>1. Choose a task you want to work on.<br>
+                               2. Set a timer for 25 minutes.<br>
+                               3. Work on the task until the timer rings.<br>
+                               4. Take a short break (5 minutes).<br>
+                               5. After four pomodoros, take a longer break (15-30 minutes).</p>
+                            <h4>Benefits of the Pomodoro Technique</h4>
+                            <p>- Reduces mental fatigue by providing regular breaks<br>
+                               - Helps maintain focus and concentration<br>
+                               - Makes large tasks feel more manageable<br>
+                               - Provides a sense of accomplishment as you complete each interval<br>
+                               - Helps estimate the time required for tasks</p>
+                            <h4>Tips for Success</h4>
+                            <p>- Use a physical timer or dedicated app rather than your phone to minimize distractions<br>
+                               - If you get distracted during a pomodoro, note the distraction and return to your task<br>
+                               - Adjust the timing to what works best for you (some people prefer 50-minute work periods)<br>
+                               - Use breaks to stretch, hydrate, or do a quick physical activity</p>
+                        </div><br>
+                        <button class="read-more">Read More</button>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 4 -->
+                <div class="blog-card" data-category="motivation">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Staying Motivated">
+                        <span class="blog-category">Motivation</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-date">February 28, 2025</div>
+                        <h3 class="blog-title">How to Stay Motivated During Exam Season</h3>
+                        <p class="blog-excerpt">Exam season can be stressful. Discover practical strategies to maintain your motivation and mental well-being during this challenging period.</p>
+                        <div class="blog-full-content">
+                            <h4>Set Clear, Achievable Goals</h4>
+                            <p>Break down your revision into manageable chunks and set specific, measurable goals for each study session. Celebrate small victories along the way to maintain momentum.</p>
+                            <h4>Create a Study Schedule</h4>
+                            <p>Plan your study time in advance, including breaks and leisure activities. A well-structured schedule reduces decision fatigue and ensures you cover all necessary material.</p>
+                            <h4>Find Your Why</h4>
+                            <p>Remind yourself why you're studying. Connect your academic goals to your larger life aspirations to maintain perspective during challenging times.</p>
+                            <h4>Practice Self-Care</h4>
+                            <p>Don't neglect sleep, nutrition, and exercise during exam season. Physical well-being directly impacts cognitive function and emotional resilience.</p>
+                            <h4>Use Positive Reinforcement</h4>
+                            <p>Reward yourself after completing study sessions or reaching milestones. This could be as simple as a favorite snack, a short walk, or an episode of your favorite show.</p>
+                            <h4>Stay Connected</h4>
+                            <p>Study with friends or join a study group. Social support can boost motivation and make the studying process more enjoyable.</p>
+                            <h4>Visualize Success</h4>
+                            <p>Take a few minutes each day to visualize yourself succeeding in your exams. This mental rehearsal can boost confidence and motivation.</p>
+                        </div><br>
+                        <button class="read-more">Read More</button>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 5 -->
+                <div class="blog-card" data-category="study-tips">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Note Taking">
+                        <span class="blog-category">Study Tips</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-date">February 22, 2025</div>
+                        <h3 class="blog-title">The Ultimate Guide to Effective Note-Taking</h3>
+                        <p class="blog-excerpt">Explore different note-taking methods like Cornell, Mind Mapping, and Outline methods to find which one works best for your learning style.</p>
+                        <div class="blog-full-content">
+                            <h4>The Cornell Method</h4>
+                            <p>Divide your page into three sections: a narrow left column for cues, a wider right column for notes, and a summary section at the bottom. This method encourages active engagement with the material.</p>
+                            <h4>Mind Mapping</h4>
+                            <p>Start with a central concept and branch out with related ideas. This visual approach is excellent for showing relationships between concepts and for creative thinking.</p>
+                            <h4>The Outline Method</h4>
+                            <p>Organize notes in a hierarchical structure using bullet points. This method works well for content that has a clear structure, like lectures with well-defined topics and subtopics.</p>
+                            <h4>The Charting Method</h4>
+                            <p>Create columns and rows to organize information. Ideal for comparing and contrasting concepts or for information that fits into categories.</p>
+                            <h4>The Sentence Method</h4>
+                            <p>Write each new thought, fact, or topic on a separate line. This is a simple approach that works well for fast-paced lectures where the content doesn't have a clear structure.</p>
+                            <h4>Digital vs. Handwritten Notes</h4>
+                            <p>Research suggests that handwriting notes may lead to better retention, but digital notes offer advantages in organization and searchability. Consider your learning style and the nature of the material when choosing your approach.</p>
+                        </div><br>
+                        <button class="read-more">Read More</button>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 6 -->
+                <div class="blog-card" data-category="productivity">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Digital Detox">
+                        <span class="blog-category">Productivity</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-date">February 15, 2025</div>
+                        <h3 class="blog-title">The Importance of Digital Detox for Better Focus</h3>
+                        <p class="blog-excerpt">Learn how taking regular breaks from digital devices can improve your concentration, memory, and overall academic performance.</p>
+                        <div class="blog-full-content">
+                            <h4>What is a Digital Detox?</h4>
+                            <p>A digital detox involves taking a break from electronic devices like smartphones, computers, and tablets. This can range from a few hours to several days, depending on your goals and needs.</p>
+                            <h4>Benefits for Students</h4>
+                            <p>- Improved concentration and focus<br>
+                               - Reduced mental fatigue<br>
+                               - Better sleep quality<br>
+                               - Enhanced creativity<br>
+                               - More time for offline activities and relationships</p>
+                            <h4>How to Implement a Digital Detox</h4>
+                            <p>1. Start small with designated device-free times each day<br>
+                               2. Create tech-free zones in your home (like the bedroom)<br>
+                               3. Use apps that limit your screen time or block distracting websites during study sessions<br>
+                               4. Schedule regular digital detox days where you avoid non-essential screen time</p>
+                            <h4>Tips for Success</h4>
+                            <p>- Inform friends and family about your detox plans so they know how to reach you in case of emergency<br>
+                               - Prepare alternative activities like reading physical books, exercising, or pursuing hobbies<br>
+                               - Use a traditional alarm clock instead of your phone to avoid the temptation of checking notifications first thing in the morning<br>
+                               - Keep a journal to document your experience and reflect on how the detox affects your well-being</p>
+                            <h4>Balancing Technology Use</h4>
+                            <p>Remember that technology itself isn't the enemy—it's how we use it. The goal of a digital detox is to develop a healthier relationship with technology, not to eliminate it entirely from your life.</p>
+                        </div><br>
+                        <button class="read-more">Read More</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Newsletter Section -->
+        <div class="newsletter">
+            <h2>Stay Updated With Our Latest Articles</h2>
+            <p>Subscribe to our newsletter and get study tips, productivity hacks, and academic insights delivered directly to your inbox.</p>
+            <form class="newsletter-form" id="newsletterForm">
+                <input type="email" class="newsletter-input" placeholder="Enter your email address" required>
+                <button type="submit" class="newsletter-btn">Subscribe</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+                    <div class="logo-text">Smart Study Planner</div>
+                </div>
+                <p class="footer-about">
+                    Smart Study Planner is an innovative tool designed to help students organize their academic life efficiently. 
+                    With intuitive task management, progress tracking, and smart reminders, our platform empowers students to 
+                    achieve their academic goals while maintaining a healthy study-life balance.
+                </p>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Quick Links</h3>
+                <div class="footer-links">
+                    <a href="about.html">About Us</a>
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="testimonials.html">Testimonials</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Resources</h3>
+                <div class="footer-links">
+                    <a href="studytips.html">Study Tips</a>
+                    <a href="time.html">Time Management</a>
+                    <a href="productivity.html">Productivity Tools</a>
+                    <a href="academic.html">Academic Resources</a>
+                    <a href="support.html">Support Center</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Contact Us</h3>
+                <div class="footer-contact">
+                    <p><i class="fas fa-envelope"></i> info@smartstudyplanner.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
+                </div>
+                <div class="social-links">
+                    <a href="www.facebook.com" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="www.twitter.com" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="www.instagram.com" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="www.linkedin.com" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; 2025 Smart Study Planner. All rights reserved.
+            </div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="cookie.html">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const blogCards = document.querySelectorAll('.blog-card');
+        const newsletterForm = document.getElementById('newsletterForm');
+        const readMoreBtns = document.querySelectorAll('.read-more');
+        const blogGrid = document.getElementById('blogGrid');
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            }
+            saveToLocalStorage('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+
+        // Load saved theme
+        const savedTheme = getFromLocalStorage('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.textContent = '☀️';
+            themeText.textContent = 'Light Mode';
+        }
+
+        // Blog Category Filtering
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                const category = btn.getAttribute('data-category');
+                
+                // Filter blog cards
+                blogCards.forEach(card => {
+                    if (category === 'all' || card.getAttribute('data-category') === category) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Read More/Less functionality
+        readMoreBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const blogCard = this.closest('.blog-card');
+                const fullContent = blogCard.querySelector('.blog-full-content');
+                const excerpt = blogCard.querySelector('.blog-excerpt');
+                
+                // If we're already in single view mode, toggle back to grid view
+                if (blogGrid.classList.contains('single-view')) {
+                    // Reset all cards
+                    blogCards.forEach(card => {
+                        card.classList.remove('expanded', 'hidden');
+                        card.style.display = 'flex';
+                    });
+                    
+                    // Reset grid layout
+                    blogGrid.classList.remove('single-view');
+                    
+                    // Reset button text
+                    readMoreBtns.forEach(b => b.textContent = 'Read More');
+                } else {
+                    // Switch to single view
+                    blogGrid.classList.add('single-view');
+                    
+                    // Hide all other cards
+                    blogCards.forEach(card => {
+                        if (card !== blogCard) {
+                            card.classList.add('hidden');
+                        }
+                    });
+                    
+                    // Expand the clicked card
+                    blogCard.classList.add('expanded');
+                    
+                    // Change button text
+                    this.textContent = 'Read Less';
+                }
+            });
+        });
+
+        // Newsletter Form Submission
+        newsletterForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const emailInput = newsletterForm.querySelector('input[type="email"]');
+            const email = emailInput.value;
+            
+            // Simple validation
+            if (email && isValidEmail(email)) {
+                showNotification('Thank you for subscribing to our newsletter!');
+                emailInput.value = '';
+            } else {
+                showNotification('Please enter a valid email address.', 'error');
+            }
+        });
+
+        // Utility functions
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function saveToLocalStorage(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function getFromLocalStorage(key) {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : null;
+        }
+
+        function showNotification(message, type = 'success') {
+            // Create notification element
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? 'var(--success)' : 'var(--danger)';
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${bgColor};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+                transform: translateX(150%);
+                transition: transform 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Animate out and remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(150%)';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Add hover effects to blog cards
+        blogCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                if (!card.classList.contains('expanded')) {
+                    card.style.transform = 'translateY(-5px)';
+                    card.style.boxShadow = '0 10px 20px var(--shadow)';
+                }
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                if (!card.classList.contains('expanded')) {
+                    card.style.transform = 'translateY(0)';
+                    card.style.boxShadow = '0 4px 6px var(--shadow)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
