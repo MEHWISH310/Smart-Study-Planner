@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productivity Tools - Smart Study Planner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00BFFF; /* Sky Blue */
+            --secondary: #FF69B4; /* Pink */
+            --accent: #FFEB3B; /* Lemon Yellow */
+            --light: #FFFFFF; /* White */
+            --dark: #212529;
+            --success: #4ade80;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray: #6c757d;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #333;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            --primary: #00BFFF;
+            --secondary: #4a1bc5;
+            --accent: #5fd4f8;
+            --light: #1a1a1a;
+            --dark: #f8f9fa;
+            --card-bg: rgba(30, 30, 30, 0.95);
+            --text: #f0f0f0;
+            --shadow: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background: linear-gradient(135deg, #00BFFF 0%, #FF69B4 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #23628d 0%, #8e3a64 100%);
+        }
+
+        /* Floating Background Objects */
+        .floating-objects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-object {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        .floating-object:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-duration: 20s;
+        }
+
+        .floating-object:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-duration: 25s;
+        }
+
+        .floating-object:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 20%;
+            animation-duration: 15s;
+        }
+
+        .floating-object:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 30%;
+            left: 70%;
+            animation-duration: 30s;
+        }
+
+        .floating-object:nth-child(5) {
+            width: 70px;
+            height: 70px;
+            top: 50%;
+            left: 40%;
+            animation-duration: 18s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(20px, 40px) rotate(90deg);
+            }
+            50% {
+                transform: translate(40px, 0) rotate(180deg);
+            }
+            75% {
+                transform: translate(20px, -40px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 80px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+            border-radius: 10%;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        .theme-toggle:hover {
+            background: var(--secondary);
+        }
+
+        /* Banner Section */
+        .banner {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            text-align: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .card-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Resources Section */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .resource-card {
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark-mode .resource-card {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px var(--shadow);
+        }
+
+        .resource-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            background: rgba(0, 191, 255, 0.1);
+            padding: 1rem;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .resource-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .resource-description {
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            color: var(--text);
+        }
+
+        .resource-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .resource-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.2s;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .resource-link {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .resource-link:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .link-icon {
+            font-size: 1.2rem;
+        }
+
+        .link-text {
+            flex: 1;
+        }
+
+        .link-arrow {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .resource-link:hover .link-arrow {
+            opacity: 1;
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 30px;
+            background-color: var(--light);
+            color: var(--text);
+            font-size: 1rem;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .dark-mode .search-input {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .search-btn {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-btn:hover {
+            background-color: var(--secondary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 2rem 2rem 1rem;
+            margin-top: 1rem;
+            box-shadow: 0 -4px 6px var(--shadow);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo .logo img {
+            width: 70px;
+            height: auto;
+            margin-bottom: 0;
+        }
+
+        .footer-logo .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .footer-about {
+            line-height: 1.6;
+            color: var(--gray);
+            max-width: 400px;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-contact p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dark-mode .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text);
+            font-size: 1.2rem;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .resources-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+            }
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Objects -->
+    <div class="floating-objects">
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo-container">
+            <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+            <div class="logo-text">Smart Study Planner</div>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html">Dashboard</a>
+            <a href="about.html">About</a>
+            <a href="tasks.html">My Tasks</a>
+            <a href="goals.html">Study Goals</a>
+            <a href="resources.html">Resources</a>
+            <a href="progress.html">Progress</a>
+        </nav>
+        <div class="nav-controls">
+            <a href="login.html" class="btn btn-outline" id="loginBtn">Login</a>
+            <a href="signup.html" class="btn btn-primary" id="signupBtn">Sign Up</a>
+            <button class="theme-toggle" id="themeToggle">
+                <span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Banner Section -->
+    <div class="container">
+        <div class="banner">
+            <h1>Productivity Tools</h1>
+            <p>Boost your efficiency and focus with these carefully selected productivity tools. From time management to task organization, discover resources that will help you study smarter and achieve more in less time.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">Tools to Enhance Your Productivity</h1>
+        
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search for productivity tools...">
+                <button class="search-btn">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </div>
+
+        <!-- Resources Grid -->
+        <div class="resources-grid" id="resourcesGrid">
+            <!-- Time Management -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h2 class="resource-title">Time Management</h2>
+                </div>
+                <p class="resource-description">
+                    Tools to help you manage your time effectively, prioritize tasks, and avoid procrastination.
+                </p>
+                <div class="resource-links">
+                    <a href="https://toggl.com" target="_blank" class="resource-link">
+                        <i class="fas fa-stopwatch link-icon"></i>
+                        <span class="link-text">Toggl Track</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://rescuetime.com" target="_blank" class="resource-link">
+                        <i class="fas fa-chart-pie link-icon"></i>
+                        <span class="link-text">RescueTime</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://pomofocus.io" target="_blank" class="resource-link">
+                        <i class="fas fa-tomato link-icon"></i>
+                        <span class="link-text">Pomofocus</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://clockify.me" target="_blank" class="resource-link">
+                        <i class="fas fa-hourglass-half link-icon"></i>
+                        <span class="link-text">Clockify</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Task Management -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h2 class="resource-title">Task Management</h2>
+                </div>
+                <p class="resource-description">
+                    Organize your study tasks, set priorities, and track your progress with these powerful tools.
+                </p>
+                <div class="resource-links">
+                    <a href="https://trello.com" target="_blank" class="resource-link">
+                        <i class="fab fa-trello link-icon"></i>
+                        <span class="link-text">Trello</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://asana.com" target="_blank" class="resource-link">
+                        <i class="fas fa-project-diagram link-icon"></i>
+                        <span class="link-text">Asana</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://todoist.com" target="_blank" class="resource-link">
+                        <i class="fas fa-check-circle link-icon"></i>
+                        <span class="link-text">Todoist</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://notion.so" target="_blank" class="resource-link">
+                        <i class="fas fa-th link-icon"></i>
+                        <span class="link-text">Notion</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Focus & Concentration -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h2 class="resource-title">Focus & Concentration</h2>
+                </div>
+                <p class="resource-description">
+                    Tools to minimize distractions, improve concentration, and maintain deep focus during study sessions.
+                </p>
+                <div class="resource-links">
+                    <a href="https://forestapp.cc" target="_blank" class="resource-link">
+                        <i class="fas fa-tree link-icon"></i>
+                        <span class="link-text">Forest</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://focustodo.com" target="_blank" class="resource-link">
+                        <i class="fas fa-seedling link-icon"></i>
+                        <span class="link-text">Focus To-Do</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://freedom.to" target="_blank" class="resource-link">
+                        <i class="fas fa-lock link-icon"></i>
+                        <span class="link-text">Freedom</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://getcoldturkey.com" target="_blank" class="resource-link">
+                        <i class="fas fa-turkey link-icon"></i>
+                        <span class="link-text">Cold Turkey</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Note Taking -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">
+                        <i class="fas fa-sticky-note"></i>
+                    </div>
+                    <h2 class="resource-title">Note Taking</h2>
+                </div>
+                <p class="resource-description">
+                    Capture, organize, and review your study notes with these powerful digital note-taking solutions.
+                </p>
+                <div class="resource-links">
+                    <a href="https://evernote.com" target="_blank" class="resource-link">
+                        <i class="fas fa-elephant link-icon"></i>
+                        <span class="link-text">Evernote</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://obsidian.md" target="_blank" class="resource-link">
+                        <i class="fas fa-gem link-icon"></i>
+                        <span class="link-text">Obsidian</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://roamresearch.com" target="_blank" class="resource-link">
+                        <i class="fas fa-network-wired link-icon"></i>
+                        <span class="link-text">Roam Research</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://notion.so" target="_blank" class="resource-link">
+                        <i class="fas fa-th link-icon"></i>
+                        <span class="link-text">Notion</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Study Planning -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h2 class="resource-title">Study Planning</h2>
+                </div>
+                <p class="resource-description">
+                    Plan your study schedule, set goals, and track your academic progress with these specialized tools.
+                </p>
+                <div class="resource-links">
+                    <a href="https://myhomeworkapp.com" target="_blank" class="resource-link">
+                        <i class="fas fa-book link-icon"></i>
+                        <span class="link-text">myHomework</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://studycorgi.com/planner" target="_blank" class="resource-link">
+                        <i class="fas fa-dog link-icon"></i>
+                        <span class="link-text">StudyCorgi Planner</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://examcountdown.com" target="_blank" class="resource-link">
+                        <i class="fas fa-hourglass-end link-icon"></i>
+                        <span class="link-text">Exam Countdown</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://google.com/calendar" target="_blank" class="resource-link">
+                        <i class="fas fa-calendar link-icon"></i>
+                        <span class="link-text">Google Calendar</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Collaboration Tools -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h2 class="resource-title">Collaboration Tools</h2>
+                </div>
+                <p class="resource-description">
+                    Work effectively with study groups, share resources, and collaborate on projects with these tools.
+                </p>
+                <div class="resource-links">
+                    <a href="https://slack.com" target="_blank" class="resource-link">
+                        <i class="fab fa-slack link-icon"></i>
+                        <span class="link-text">Slack</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://discord.com" target="_blank" class="resource-link">
+                        <i class="fab fa-discord link-icon"></i>
+                        <span class="link-text">Discord</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://miro.com" target="_blank" class="resource-link">
+                        <i class="fas fa-chalkboard link-icon"></i>
+                        <span class="link-text">Miro</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://figma.com" target="_blank" class="resource-link">
+                        <i class="fas fa-palette link-icon"></i>
+                        <span class="link-text">Figma</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mind Mapping -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">
+                        <i class="fas fa-sitemap"></i>
+                    </div>
+                    <h2 class="resource-title">Mind Mapping</h2>
+                </div>
+                <p class="resource-description">
+                    Visualize complex concepts, organize ideas, and make connections with these mind mapping tools.
+                </p>
+                <div class="resource-links">
+                    <a href="https://miro.com/mind-map" target="_blank" class="resource-link">
+                        <i class="fas fa-project-diagram link-icon"></i>
+                        <span class="link-text">Miro Mind Maps</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://mindmeister.com" target="_blank" class="resource-link">
+                        <i class="fas fa-map link-icon"></i>
+                        <span class="link-text">MindMeister</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://xmind.net" target="_blank" class="resource-link">
+                        <i class="fas fa-brain link-icon"></i>
+                        <span class="link-text">XMind</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://coggle.it" target="_blank" class="resource-link">
+                        <i class="fas fa-share-alt link-icon"></i>
+                        <span class="link-text">Coggle</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Digital Wellbeing -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h2 class="resource-title">Digital Wellbeing</h2>
+                </div>
+                <p class="resource-description">
+                    Maintain a healthy balance between screen time and breaks to prevent burnout and stay productive.
+                </p>
+                <div class="resource-links">
+                    <a href="https://headspace.com" target="_blank" class="resource-link">
+                        <i class="fas fa-spa link-icon"></i>
+                        <span class="link-text">Headspace</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://calm.com" target="_blank" class="resource-link">
+                        <i class="fas fa-cloud link-icon"></i>
+                        <span class="link-text">Calm</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://streaksapp.com" target="_blank" class="resource-link">
+                        <i class="fas fa-fire link-icon"></i>
+                        <span class="link-text">Streaks</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://digitalwellbeing.google" target="_blank" class="resource-link">
+                        <i class="fab fa-google link-icon"></i>
+                        <span class="link-text">Google Digital Wellbeing</span>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+                    <div class="logo-text">Smart Study Planner</div>
+                </div>
+                <p class="footer-about">
+                    Smart Study Planner is an innovative tool designed to help students organize their academic life efficiently. 
+                    With intuitive task management, progress tracking, and smart reminders, our platform empowers students to 
+                    achieve their academic goals while maintaining a healthy study-life balance.
+                </p>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Quick Links</h3>
+                <div class="footer-links">
+                    <a href="about.html">About Us</a>
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="testimonials.html">Testimonials</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Resources</h3>
+                <div class="footer-links">
+                    <a href="studytips.html">Study Tips</a>
+                    <a href="time.html">Time Management</a>
+                    <a href="productivity.html">Productivity Tools</a>
+                    <a href="academic.html">Academic Resources</a>
+                    <a href="support.html">Support Center</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Contact Us</h3>
+                <div class="footer-contact">
+                    <p><i class="fas fa-envelope"></i> info@smartstudyplanner.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
+                </div>
+                <div class="social-links">
+                    <a href="www.facebook.com" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="www.twitter.com" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="www.instagram.com" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="www.linkedin.com" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; 2025 Smart Study Planner. All rights reserved.
+            </div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="cookie.html">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+        const searchInput = document.querySelector('.search-input');
+        const searchBtn = document.querySelector('.search-btn');
+        const resourcesGrid = document.getElementById('resourcesGrid');
+        const resourceCards = document.querySelectorAll('.resource-card');
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            }
+            saveToLocalStorage('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+
+        // Search Functionality
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                // Show all cards if search is empty
+                resourceCards.forEach(card => {
+                    card.style.display = 'block';
+                });
+                return;
+            }
+            
+            // Filter cards based on search term
+            resourceCards.forEach(card => {
+                const title = card.querySelector('.resource-title').textContent.toLowerCase();
+                const description = card.querySelector('.resource-description').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Load saved theme
+        const savedTheme = getFromLocalStorage('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.textContent = '☀️';
+            themeText.textContent = 'Light Mode';
+        }
+
+        // Utility functions
+        function saveToLocalStorage(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function getFromLocalStorage(key) {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : null;
+        }
+    </script>
+</body>
+</html>

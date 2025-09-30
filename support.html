@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Center - Smart Study Planner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00BFFF; /* Sky Blue */
+            --secondary: #FF69B4; /* Pink */
+            --accent: #FFEB3B; /* Lemon Yellow */
+            --light: #FFFFFF; /* White */
+            --dark: #212529;
+            --success: #4ade80;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray: #6c757d;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #333;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            --primary: #00BFFF;
+            --secondary: #4a1bc5;
+            --accent: #5fd4f8;
+            --light: #1a1a1a;
+            --dark: #f8f9fa;
+            --card-bg: rgba(30, 30, 30, 0.95);
+            --text: #f0f0f0;
+            --shadow: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background: linear-gradient(135deg, #00BFFF 0%, #FF69B4 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #23628d 0%, #8e3a64 100%);
+        }
+
+        /* Floating Background Objects */
+        .floating-objects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-object {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        .floating-object:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-duration: 20s;
+        }
+
+        .floating-object:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-duration: 25s;
+        }
+
+        .floating-object:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 20%;
+            animation-duration: 15s;
+        }
+
+        .floating-object:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 30%;
+            left: 70%;
+            animation-duration: 30s;
+        }
+
+        .floating-object:nth-child(5) {
+            width: 70px;
+            height: 70px;
+            top: 50%;
+            left: 40%;
+            animation-duration: 18s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(20px, 40px) rotate(90deg);
+            }
+            50% {
+                transform: translate(40px, 0) rotate(180deg);
+            }
+            75% {
+                transform: translate(20px, -40px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 80px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+            border-radius: 10%;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        .theme-toggle:hover {
+            background: var(--secondary);
+        }
+
+        /* Banner Section */
+        .banner {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            text-align: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .card-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Support Content */
+        .support-content {
+            line-height: 1.6;
+        }
+
+        .support-section {
+            margin-bottom: 2rem;
+        }
+
+        .support-section h3 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .support-section p, .support-section ul {
+            margin-bottom: 1rem;
+        }
+
+        .support-section ul {
+            padding-left: 1.5rem;
+        }
+
+        .support-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight {
+            background-color: rgba(0, 191, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            margin: 1.5rem 0;
+        }
+
+        .contact-box {
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .dark-mode .contact-box {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .contact-box h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* FAQ Styles */
+        .faq-container {
+            margin-top: 1.5rem;
+        }
+
+        .faq-item {
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px var(--shadow);
+        }
+
+        .faq-question {
+            background-color: var(--light);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .dark-mode .faq-question {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .faq-question:hover {
+            background-color: rgba(0, 191, 255, 0.1);
+        }
+
+        .faq-answer {
+            background-color: var(--card-bg);
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 1rem 1.5rem;
+            max-height: 500px;
+        }
+
+        .faq-toggle {
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        /* Contact Form */
+        .contact-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            background-color: var(--light);
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .dark-mode .form-input, .dark-mode .form-textarea {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--secondary);
+        }
+
+        /* Chatbot Styles */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .chatbot-toggle {
+            background-color: var(--primary);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .chatbot-toggle:hover {
+            background-color: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .chatbot-window {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 350px;
+            height: 450px;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chatbot-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 0.75rem;
+            border-radius: 12px;
+            line-height: 1.4;
+        }
+
+        .bot-message {
+            background-color: rgba(0, 191, 255, 0.1);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .user-message {
+            background-color: rgba(255, 105, 180, 0.1);
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .chatbot-input {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            background-color: var(--light);
+            color: var(--text);
+        }
+
+        .dark-mode .chatbot-input input {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .chatbot-send {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chatbot-send:hover {
+            background-color: var(--secondary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 2rem 2rem 1rem;
+            margin-top: 1rem;
+            box-shadow: 0 -4px 6px var(--shadow);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo .logo img {
+            width: 70px;
+            height: auto;
+            margin-bottom: 0;
+        }
+
+        .footer-logo .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .footer-about {
+            line-height: 1.6;
+            color: var(--gray);
+            max-width: 400px;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-contact p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dark-mode .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text);
+            font-size: 1.2rem;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .contact-form {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .chatbot-window {
+                width: 300px;
+                right: -20px;
+            }
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Objects -->
+    <div class="floating-objects">
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo-container">
+            <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+            <div class="logo-text">Smart Study Planner</div>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html">Dashboard</a>
+            <a href="about.html">About</a>
+            <a href="tasks.html">My Tasks</a>
+            <a href="goals.html">Study Goals</a>
+            <a href="resources.html">Resources</a>
+            <a href="progress.html">Progress</a>
+        </nav>
+        <div class="nav-controls">
+            <a href="login.html" class="btn btn-outline" id="loginBtn">Login</a>
+            <a href="signup.html" class="btn btn-primary" id="signupBtn">Sign Up</a>
+            <button class="theme-toggle" id="themeToggle">
+                <span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Banner Section -->
+    <div class="container">
+        <div class="banner">
+            <h1>Support Center</h1>
+            <p>We're here to help you succeed. Find answers to common questions, get in touch with our support team, or chat with our virtual assistant for immediate help.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">How Can We Help You?</h1>
+        
+        <!-- Contact Information -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Contact Us</h2>
+            </div>
+            <div class="support-content">
+                <div class="support-section">
+                    <p>Our support team is available to assist you with any questions or issues you may have. Choose the contact method that works best for you.</p>
+                </div>
+                
+                <div class="contact-box">
+                    <h3>Get in Touch</h3>
+                    <p><i class="fas fa-envelope"></i> support@smartstudyplanner.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
+                    <p><i class="fas fa-clock"></i> Monday - Friday: 9:00 AM - 6:00 PM EST</p>
+                </div>
+                
+                <div class="highlight">
+                    <p><strong>Need immediate help?</strong> Try our chatbot for quick answers to common questions or submit a support ticket below.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Frequently Asked Questions</h2>
+            </div>
+            <div class="support-content">
+                <div class="support-section">
+                    <p>Find quick answers to the most common questions about Smart Study Planner.</p>
+                </div>
+                
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            How do I create a study schedule?
+                            <i class="fas fa-chevron-down faq-toggle"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>To create a study schedule, go to the Dashboard and click on "Create Schedule." You can then add your courses, set study times, and customize your schedule based on your preferences and availability.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Can I sync my calendar with Smart Study Planner?
+                            <i class="fas fa-chevron-down faq-toggle"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes, you can sync with Google Calendar, Apple Calendar, and Outlook. Go to Settings > Calendar Integration to connect your preferred calendar service.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            How do I track my study progress?
+                            <i class="fas fa-chevron-down faq-toggle"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Use the Progress section to view your study statistics. You can track time spent studying, completed tasks, and goal achievements. The dashboard also provides visual charts of your progress over time.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Is my data secure with Smart Study Planner?
+                            <i class="fas fa-chevron-down faq-toggle"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes, we take data security seriously. All your information is encrypted and stored securely. We never share your personal data with third parties without your consent. Read our <a href="privacy.html">Privacy Policy</a> for more details.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Can I use Smart Study Planner on multiple devices?
+                            <i class="fas fa-chevron-down faq-toggle"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes, your account syncs across all your devices. You can access your study plans from your computer, tablet, or smartphone using our web app or mobile applications.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            What should I do if I forget my password?
+                            <i class="fas fa-chevron-down faq-toggle"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Click on "Forgot Password" on the login page. We'll send a password reset link to your registered email address. If you're still having trouble, contact our support team.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ask a Question -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Ask a Question</h2>
+            </div>
+            <div class="support-content">
+                <div class="support-section">
+                    <p>Can't find what you're looking for? Send us your question and we'll get back to you as soon as possible.</p>
+                </div>
+                
+                <form class="contact-form" id="supportForm">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Your Name</label>
+                        <input type="text" id="name" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address</label>
+                        <input type="email" id="email" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label class="form-label" for="subject">Subject</label>
+                        <input type="text" id="subject" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label class="form-label" for="message">Your Question</label>
+                        <textarea id="message" class="form-textarea" required></textarea>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i> Send Question
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <div class="chatbot-toggle" id="chatbotToggle">
+            <i class="fas fa-robot"></i>
+        </div>
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <div class="chatbot-title">
+                    <i class="fas fa-robot"></i> Study Assistant
+                </div>
+                <button class="chatbot-close" id="chatbotClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot-message">
+                    Hello! I'm your Study Assistant. How can I help you today?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbotInput" placeholder="Type your message...">
+                <button class="chatbot-send" id="chatbotSend">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+                    <div class="logo-text">Smart Study Planner</div>
+                </div>
+                <p class="footer-about">
+                    Smart Study Planner is an innovative tool designed to help students organize their academic life efficiently. 
+                    With intuitive task management, progress tracking, and smart reminders, our platform empowers students to 
+                    achieve their academic goals while maintaining a healthy study-life balance.
+                </p>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Quick Links</h3>
+                <div class="footer-links">
+                    <a href="about.html">About Us</a>
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="testimonials.html">Testimonials</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Resources</h3>
+                <div class="footer-links">
+                    <a href="studytips.html">Study Tips</a>
+                    <a href="time.html">Time Management</a>
+                    <a href="productivity.html">Productivity Tools</a>
+                    <a href="academic.html">Academic Resources</a>
+                    <a href="support.html" style="color: var(--primary);">Support Center</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Contact Us</h3>
+                <div class="footer-contact">
+                    <p><i class="fas fa-envelope"></i> info@smartstudyplanner.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
+                </div>
+                <div class="social-links">
+                    <a href="www.facebook.com" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="www.twitter.com" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="www.instagram.com" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="www.linkedin.com" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; 2025 Smart Study Planner. All rights reserved.
+            </div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="cookie.html">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+        const faqItems = document.querySelectorAll('.faq-item');
+        const supportForm = document.getElementById('supportForm');
+        const chatbotToggle = document.getElementById('chatbotToggle');
+        const chatbotWindow = document.getElementById('chatbotWindow');
+        const chatbotClose = document.getElementById('chatbotClose');
+        const chatbotMessages = document.getElementById('chatbotMessages');
+        const chatbotInput = document.getElementById('chatbotInput');
+        const chatbotSend = document.getElementById('chatbotSend');
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            }
+            saveToLocalStorage('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+
+        // FAQ Toggle
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // Support Form Submission
+        supportForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your question! We will get back to you within 24 hours.');
+            supportForm.reset();
+        });
+
+        // Chatbot Toggle
+        chatbotToggle.addEventListener('click', () => {
+            chatbotWindow.style.display = 'flex';
+        });
+
+        chatbotClose.addEventListener('click', () => {
+            chatbotWindow.style.display = 'none';
+        });
+
+        // Chatbot Functionality
+        chatbotSend.addEventListener('click', sendMessage);
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const message = chatbotInput.value.trim();
+            if (message === '') return;
+
+            // Add user message
+            addMessage(message, 'user');
+            chatbotInput.value = '';
+
+            // Simulate bot response
+            setTimeout(() => {
+                const response = getBotResponse(message);
+                addMessage(response, 'bot');
+            }, 1000);
+        }
+
+        function addMessage(text, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', `${sender}-message`);
+            messageElement.textContent = text;
+            chatbotMessages.appendChild(messageElement);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        function getBotResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+                return "Hello! How can I assist you with your studies today?";
+            } else if (lowerMessage.includes('schedule') || lowerMessage.includes('plan')) {
+                return "To create a study schedule, go to the Dashboard and click 'Create Schedule'. You can add courses, set study times, and customize based on your preferences.";
+            } else if (lowerMessage.includes('progress') || lowerMessage.includes('track')) {
+                return "You can track your study progress in the Progress section. It shows time spent studying, completed tasks, and goal achievements with visual charts.";
+            } else if (lowerMessage.includes('task') || lowerMessage.includes('assignment')) {
+                return "To manage tasks, go to 'My Tasks'. You can add new tasks, set due dates, prioritize, and mark them as completed.";
+            } else if (lowerMessage.includes('goal') || lowerMessage.includes('target')) {
+                return "Set study goals in the 'Study Goals' section. You can define what you want to achieve and track your progress toward those goals.";
+            } else if (lowerMessage.includes('resource') || lowerMessage.includes('material')) {
+                return "Check the 'Resources' section for academic materials, study tips, and productivity tools to enhance your learning.";
+            } else if (lowerMessage.includes('problem') || lowerMessage.includes('issue') || lowerMessage.includes('help')) {
+                return "I'm sorry you're experiencing issues. You can submit a detailed question using the form on this page, or contact our support team directly at support@smartstudyplanner.com.";
+            } else {
+                return "I'm here to help with study planning and productivity. You can ask me about schedules, tasks, goals, progress tracking, or resources. If I can't help, our support team is available!";
+            }
+        }
+
+        // Load saved theme
+        const savedTheme = getFromLocalStorage('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.textContent = '☀️';
+            themeText.textContent = 'Light Mode';
+        }
+
+        // Utility functions
+        function saveToLocalStorage(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function getFromLocalStorage(key) {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : null;
+        }
+    </script>
+</body>
+</html>
