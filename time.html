@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Management - Smart Study Planner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* All CSS styles from the resources page remain the same */
+        :root {
+            --primary: #00BFFF; /* Sky Blue */
+            --secondary: #FF69B4; /* Pink */
+            --accent: #FFEB3B; /* Lemon Yellow */
+            --light: #FFFFFF; /* White */
+            --dark: #212529;
+            --success: #4ade80;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray: #6c757d;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #333;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            --primary: #00BFFF;
+            --secondary: #4a1bc5;
+            --accent: #5fd4f8;
+            --light: #1a1a1a;
+            --dark: #f8f9fa;
+            --card-bg: rgba(30, 30, 30, 0.95);
+            --text: #f0f0f0;
+            --shadow: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background: linear-gradient(135deg, #00BFFF 0%, #FF69B4 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #23628d 0%, #8e3a64 100%);
+        }
+
+        /* Floating Background Objects */
+        .floating-objects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-object {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        .floating-object:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-duration: 20s;
+        }
+
+        .floating-object:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-duration: 25s;
+        }
+
+        .floating-object:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 20%;
+            animation-duration: 15s;
+        }
+
+        .floating-object:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 30%;
+            left: 70%;
+            animation-duration: 30s;
+        }
+
+        .floating-object:nth-child(5) {
+            width: 70px;
+            height: 70px;
+            top: 50%;
+            left: 40%;
+            animation-duration: 18s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(20px, 40px) rotate(90deg);
+            }
+            50% {
+                transform: translate(40px, 0) rotate(180deg);
+            }
+            75% {
+                transform: translate(20px, -40px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 80px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+            border-radius: 10%;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        .theme-toggle:hover {
+            background: var(--secondary);
+        }
+
+        /* Banner Section */
+        .banner {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            text-align: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .card-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Resources Section */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .resource-card {
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark-mode .resource-card {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px var(--shadow);
+        }
+
+        .resource-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            background: rgba(0, 191, 255, 0.1);
+            padding: 1rem;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .resource-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .resource-description {
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            color: var(--text);
+        }
+
+        .resource-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .resource-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.2s;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .resource-link {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .resource-link:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .link-icon {
+            font-size: 1.2rem;
+        }
+
+        .link-text {
+            flex: 1;
+        }
+
+        .link-arrow {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .resource-link:hover .link-arrow {
+            opacity: 1;
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 30px;
+            background-color: var(--light);
+            color: var(--text);
+            font-size: 1rem;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .dark-mode .search-input {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .search-btn {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-btn:hover {
+            background-color: var(--secondary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 2rem 2rem 1rem;
+            margin-top: 1rem;
+            box-shadow: 0 -4px 6px var(--shadow);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo .logo img {
+            width: 70px;
+            height: auto;
+            margin-bottom: 0;
+        }
+
+        .footer-logo .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .footer-about {
+            line-height: 1.6;
+            color: var(--gray);
+            max-width: 400px;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-contact p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dark-mode .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text);
+            font-size: 1.2rem;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Time Management Specific Styles */
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .technique-card {
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark-mode .technique-card {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .technique-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px var(--shadow);
+        }
+
+        .technique-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .technique-icon {
+            font-size: 1.8rem;
+            color: var(--primary);
+            background: rgba(0, 191, 255, 0.1);
+            padding: 0.8rem;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .technique-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .technique-description {
+            margin-bottom: 1rem;
+            line-height: 1.5;
+            color: var(--text);
+        }
+
+        .technique-steps {
+            margin-left: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .technique-steps li {
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .technique-tip {
+            background-color: rgba(255, 235, 59, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 0.75rem;
+            border-radius: 0 4px 4px 0;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        .dark-mode .technique-tip {
+            background-color: rgba(95, 212, 248, 0.1);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tool-card {
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .dark-mode .tool-card {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px var(--shadow);
+        }
+
+        .tool-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .tool-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-description {
+            font-size: 0.9rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .tool-link {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+
+        .tool-link:hover {
+            background-color: var(--secondary);
+        }
+
+        .time-tracker {
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .dark-mode .time-tracker {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .tracker-display {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .timer {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .tracker-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tracker-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .start-btn {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .pause-btn {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .reset-btn {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .tracker-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        .tracker-tasks {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+        }
+
+        .task-name {
+            font-weight: 500;
+        }
+
+        .task-time {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .resources-grid, .technique-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .tracker-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Objects -->
+    <div class="floating-objects">
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo-container">
+            <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+            <div class="logo-text">Smart Study Planner</div>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html">Dashboard</a>
+            <a href="about.html">About</a>
+            <a href="tasks.html">My Tasks</a>
+            <a href="goals.html">Study Goals</a>
+            <a href="resources.html">Resources</a>
+            <a href="progress.html">Progress</a>
+        </nav>
+        <div class="nav-controls">
+            <a href="login.html" class="btn btn-outline" id="loginBtn">Login</a>
+            <a href="signup.html" class="btn btn-primary" id="signupBtn">Sign Up</a>
+            <button class="theme-toggle" id="themeToggle">
+                <span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Banner Section -->
+    <div class="container">
+        <div class="banner">
+            <h1>Time Management</h1>
+            <p>Master the art of time management with proven techniques, tools, and strategies. Learn how to prioritize tasks, avoid procrastination, and make the most of your study sessions.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">Time Management Techniques</h1>
+        
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search for techniques...">
+                <button class="search-btn">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </div>
+
+        <!-- Time Management Techniques -->
+        <div class="technique-grid" id="techniquesGrid">
+            <!-- Pomodoro Technique -->
+            <div class="technique-card">
+                <div class="technique-header">
+                    <div class="technique-icon">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <h2 class="technique-title">Pomodoro Technique</h2>
+                </div>
+                <p class="technique-description">
+                    Break your work into intervals, traditionally 25 minutes in length, separated by short breaks.
+                </p>
+                <ol class="technique-steps">
+                    <li>Choose a task to work on</li>
+                    <li>Set a timer for 25 minutes</li>
+                    <li>Work on the task until the timer rings</li>
+                    <li>Take a short break (5 minutes)</li>
+                    <li>After four pomodoros, take a longer break (15-30 minutes)</li>
+                </ol>
+                <div class="technique-tip">
+                    <strong>Tip:</strong> Use our built-in timer below to practice this technique!
+                </div>
+            </div>
+
+            <!-- Eisenhower Matrix -->
+            <div class="technique-card">
+                <div class="technique-header">
+                    <div class="technique-icon">
+                        <i class="fas fa-th"></i>
+                    </div>
+                    <h2 class="technique-title">Eisenhower Matrix</h2>
+                </div>
+                <p class="technique-description">
+                    Prioritize tasks by urgency and importance, sorting out less urgent and important tasks.
+                </p>
+                <ol class="technique-steps">
+                    <li>Create a 2x2 matrix with "Urgent/Not Urgent" and "Important/Not Important"</li>
+                    <li>Place your tasks in the appropriate quadrant</li>
+                    <li>Focus on tasks that are both urgent and important first</li>
+                    <li>Schedule time for important but not urgent tasks</li>
+                    <li>Delegate or eliminate tasks that are not important</li>
+                </ol>
+                <div class="technique-tip">
+                    <strong>Tip:</strong> This helps prevent the "tyranny of the urgent" where urgent tasks dominate your time.
+                </div>
+            </div>
+
+            <!-- Time Blocking -->
+            <div class="technique-card">
+                <div class="technique-header">
+                    <div class="technique-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h2 class="technique-title">Time Blocking</h2>
+                </div>
+                <p class="technique-description">
+                    Plan out every moment of your day in advance by dedicating specific time "blocks" for certain activities.
+                </p>
+                <ol class="technique-steps">
+                    <li>Divide your day into blocks of time (30 minutes to 2 hours)</li>
+                    <li>Assign specific tasks or activities to each block</li>
+                    <li>Include blocks for breaks, meals, and personal time</li>
+                    <li>Stick to your schedule as closely as possible</li>
+                    <li>Review and adjust your blocks weekly</li>
+                </ol>
+                <div class="technique-tip">
+                    <strong>Tip:</strong> Color-code your blocks to easily distinguish between different types of activities.
+                </div>
+            </div>
+
+            <!-- Eat That Frog -->
+            <div class="technique-card">
+                <div class="technique-header">
+                    <div class="technique-icon">
+                        <i class="fas fa-frog"></i>
+                    </div>
+                    <h2 class="technique-title">Eat That Frog</h2>
+                </div>
+                <p class="technique-description">
+                    Tackle your most challenging task first thing in the morning when your energy and willpower are highest.
+                </p>
+                <ol class="technique-steps">
+                    <li>Identify your most important task (your "frog")</li>
+                    <li>Do this task first thing in the morning</li>
+                    <li>Don't spend too much time thinking about it - just start</li>
+                    <li>Reward yourself after completing the task</li>
+                    <li>Make this a daily habit</li>
+                </ol>
+                <div class="technique-tip">
+                    <strong>Tip:</strong> If you have two frogs, eat the ugliest one first - tackle the hardest task first.
+                </div>
+            </div>
+
+            <!-- 80/20 Rule -->
+            <div class="technique-card">
+                <div class="technique-header">
+                    <div class="technique-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h2 class="technique-title">80/20 Rule (Pareto Principle)</h2>
+                </div>
+                <p class="technique-description">
+                    Focus on the 20% of tasks that will yield 80% of the results.
+                </p>
+                <ol class="technique-steps">
+                    <li>Identify all the tasks you need to complete</li>
+                    <li>Determine which tasks will have the biggest impact</li>
+                    <li>Prioritize these high-impact tasks</li>
+                    <li>Spend less time on low-impact activities</li>
+                    <li>Regularly reassess which tasks are high-impact</li>
+                </ol>
+                <div class="technique-tip">
+                    <strong>Tip:</strong> This principle applies to many areas - 20% of your study topics likely cover 80% of exam content.
+                </div>
+            </div>
+
+            <!-- Getting Things Done -->
+            <div class="technique-card">
+                <div class="technique-header">
+                    <div class="technique-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2 class="technique-title">Getting Things Done (GTD)</h2>
+                </div>
+                <p class="technique-description">
+                    A five-step method for organizing and tracking tasks to reduce mental clutter and increase productivity.
+                </p>
+                <ol class="technique-steps">
+                    <li><strong>Capture:</strong> Collect all your tasks and ideas in an inbox</li>
+                    <li><strong>Clarify:</strong> Process each item and decide what needs to be done</li>
+                    <li><strong>Organize:</strong> Sort tasks into categories and priorities</li>
+                    <li><strong>Reflect:</strong> Regularly review your system and tasks</li>
+                    <li><strong>Engage:</strong> Actually do the tasks</li>
+                </ol>
+                <div class="technique-tip">
+                    <strong>Tip:</strong> The key is to get everything out of your head and into a trusted system.
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Tracker -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Study Time Tracker</h2>
+            </div>
+            <div class="time-tracker">
+                <div class="tracker-display">
+                    <div class="timer" id="timer">25:00</div>
+                    <div id="trackerStatus">Ready to start</div>
+                </div>
+                <div class="tracker-controls">
+                    <button class="tracker-btn start-btn" id="startBtn">
+                        <i class="fas fa-play"></i> Start
+                    </button>
+                    <button class="tracker-btn pause-btn" id="pauseBtn" disabled>
+                        <i class="fas fa-pause"></i> Pause
+                    </button>
+                    <button class="tracker-btn reset-btn" id="resetBtn">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+                <div class="tracker-tasks">
+                    <div class="task-item">
+                        <span class="task-name">Current Session</span>
+                        <span class="task-time" id="currentSession">0 min</span>
+                    </div>
+                    <div class="task-item">
+                        <span class="task-name">Total Study Time Today</span>
+                        <span class="task-time" id="totalStudyTime">0 min</span>
+                    </div>
+                    <div class="task-item">
+                        <span class="task-name">Pomodoros Completed</span>
+                        <span class="task-time" id="pomodorosCompleted">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Management Tools -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Time Management Tools</h2>
+            </div>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3 class="tool-title">Task Manager</h3>
+                    <p class="tool-description">Organize and prioritize your tasks with our built-in task manager.</p>
+                    <a href="tasks.html" class="tool-link">Open Tool</a>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-calendar-plus"></i>
+                    </div>
+                    <h3 class="tool-title">Study Planner</h3>
+                    <p class="tool-description">Plan your study sessions and set reminders for important deadlines.</p>
+                    <a href="planner.html" class="tool-link">Open Tool</a>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="tool-title">Progress Tracker</h3>
+                    <p class="tool-description">Monitor your study habits and track your productivity over time.</p>
+                    <a href="progress.html" class="tool-link">Open Tool</a>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3 class="tool-title">Reminders</h3>
+                    <p class="tool-description">Set up custom reminders for assignments, exams, and study sessions.</p>
+                    <a href="reminders.html" class="tool-link">Open Tool</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Resources -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Additional Resources</h2>
+            </div>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-header">
+                        <div class="resource-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h2 class="resource-title">Books on Time Management</h2>
+                    </div>
+                    <p class="resource-description">
+                        Recommended reading to deepen your understanding of time management principles.
+                    </p>
+                    <div class="resource-links">
+                        <div class="resource-link">
+                            <i class="fas fa-book link-icon"></i>
+                            <span class="link-text">"Deep Work" by Cal Newport</span>
+                        </div>
+                        <div class="resource-link">
+                            <i class="fas fa-book link-icon"></i>
+                            <span class="link-text">"Atomic Habits" by James Clear</span>
+                        </div>
+                        <div class="resource-link">
+                            <i class="fas fa-book link-icon"></i>
+                            <span class="link-text">"The 7 Habits of Highly Effective People"</span>
+                        </div>
+                        <div class="resource-link">
+                            <i class="fas fa-book link-icon"></i>
+                            <span class="link-text">"Getting Things Done" by David Allen</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-header">
+                        <div class="resource-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h2 class="resource-title">Video Resources</h2>
+                    </div>
+                    <p class="resource-description">
+                        Watch these videos to learn time management strategies from experts.
+                    </p>
+                    <div class="resource-links">
+                        <div class="resource-link">
+                            <i class="fab fa-youtube link-icon"></i>
+                            <span class="link-text">Time Management Techniques</span>
+                        </div>
+                        <div class="resource-link">
+                            <i class="fab fa-youtube link-icon"></i>
+                            <span class="link-text">How to Stop Procrastinating</span>
+                        </div>
+                        <div class="resource-link">
+                            <i class="fab fa-youtube link-icon"></i>
+                            <span class="link-text">The Pomodoro Technique Explained</span>
+                        </div>
+                        <div class="resource-link">
+                            <i class="fab fa-youtube link-icon"></i>
+                            <span class="link-text">Productivity Tips for Students</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+                    <div class="logo-text">Smart Study Planner</div>
+                </div>
+                <p class="footer-about">
+                    Smart Study Planner is an innovative tool designed to help students organize their academic life efficiently. 
+                    With intuitive task management, progress tracking, and smart reminders, our platform empowers students to 
+                    achieve their academic goals while maintaining a healthy study-life balance.
+                </p>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Quick Links</h3>
+                <div class="footer-links">
+                    <a href="about.html">About Us</a>
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="testimonials.html">Testimonials</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Resources</h3>
+                <div class="footer-links">
+                    <a href="studytips.html">Study Tips</a>
+                    <a href="time.html">Time Management</a>
+                    <a href="productivity.html">Productivity Tools</a>
+                    <a href="academic.html">Academic Resources</a>
+                    <a href="support.html">Support Center</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Contact Us</h3>
+                <div class="footer-contact">
+                    <p><i class="fas fa-envelope"></i> info@smartstudyplanner.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
+                </div>
+                <div class="social-links">
+                    <a href="www.facebook.com" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="www.twitter.com" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="www.instagram.com" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="www.linkedin.com" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; 2025 Smart Study Planner. All rights reserved.
+            </div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="cookie.html">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+        const searchInput = document.querySelector('.search-input');
+        const searchBtn = document.querySelector('.search-btn');
+        const techniquesGrid = document.getElementById('techniquesGrid');
+        const techniqueCards = document.querySelectorAll('.technique-card');
+        
+        // Timer Elements
+        const timer = document.getElementById('timer');
+        const trackerStatus = document.getElementById('trackerStatus');
+        const startBtn = document.getElementById('startBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const currentSession = document.getElementById('currentSession');
+        const totalStudyTime = document.getElementById('totalStudyTime');
+        const pomodorosCompleted = document.getElementById('pomodorosCompleted');
+
+        // Timer Variables
+        let timerInterval;
+        let timeLeft = 25 * 60; // 25 minutes in seconds
+        let isRunning = false;
+        let isBreak = false;
+        let totalStudySeconds = 0;
+        let pomodoros = 0;
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            }
+            saveToLocalStorage('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+
+        // Search Functionality
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                // Show all cards if search is empty
+                techniqueCards.forEach(card => {
+                    card.style.display = 'block';
+                });
+                return;
+            }
+            
+            // Filter cards based on search term
+            techniqueCards.forEach(card => {
+                const title = card.querySelector('.technique-title').textContent.toLowerCase();
+                const description = card.querySelector('.technique-description').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Timer Functions
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+            
+            isRunning = true;
+            startBtn.disabled = true;
+            pauseBtn.disabled = false;
+            trackerStatus.textContent = isBreak ? "Break Time" : "Study Time";
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimer();
+                
+                // Update current session time
+                const sessionMinutes = Math.floor((isBreak ? 5*60 - timeLeft : 25*60 - timeLeft) / 60);
+                currentSession.textContent = `${sessionMinutes} min`;
+                
+                // Update total study time (only during study sessions)
+                if (!isBreak) {
+                    totalStudySeconds++;
+                    const totalMinutes = Math.floor(totalStudySeconds / 60);
+                    totalStudyTime.textContent = `${totalMinutes} min`;
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    isRunning = false;
+                    
+                    if (!isBreak) {
+                        // Study session completed
+                        pomodoros++;
+                        pomodorosCompleted.textContent = pomodoros;
+                        trackerStatus.textContent = "Study session complete! Take a break.";
+                        
+                        // Start break timer
+                        isBreak = true;
+                        timeLeft = 5 * 60; // 5-minute break
+                    } else {
+                        // Break completed
+                        trackerStatus.textContent = "Break over! Ready for next session?";
+                        isBreak = false;
+                        timeLeft = 25 * 60; // 25-minute study session
+                    }
+                    
+                    updateTimer();
+                    startBtn.disabled = false;
+                    pauseBtn.disabled = true;
+                    
+                    // Save to localStorage
+                    saveToLocalStorage('totalStudySeconds', totalStudySeconds);
+                    saveToLocalStorage('pomodoros', pomodoros);
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            startBtn.disabled = false;
+            pauseBtn.disabled = true;
+            trackerStatus.textContent = "Paused";
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            isBreak = false;
+            timeLeft = 25 * 60;
+            updateTimer();
+            startBtn.disabled = false;
+            pauseBtn.disabled = true;
+            trackerStatus.textContent = "Ready to start";
+            currentSession.textContent = "0 min";
+        }
+
+        // Timer Event Listeners
+        startBtn.addEventListener('click', startTimer);
+        pauseBtn.addEventListener('click', pauseTimer);
+        resetBtn.addEventListener('click', resetTimer);
+
+        // Load saved theme and timer data
+        const savedTheme = getFromLocalStorage('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.textContent = '☀️';
+            themeText.textContent = 'Light Mode';
+        }
+
+        const savedStudySeconds = getFromLocalStorage('totalStudySeconds') || 0;
+        totalStudySeconds = savedStudySeconds;
+        const totalMinutes = Math.floor(totalStudySeconds / 60);
+        totalStudyTime.textContent = `${totalMinutes} min`;
+        
+        const savedPomodoros = getFromLocalStorage('pomodoros') || 0;
+        pomodoros = savedPomodoros;
+        pomodorosCompleted.textContent = pomodoros;
+
+        // Utility functions
+        function saveToLocalStorage(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function getFromLocalStorage(key) {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : null;
+        }
+
+        // Initialize timer display
+        updateTimer();
+    </script>
+</body>
+</html>

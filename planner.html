@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Planner - Smart Study Planner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00BFFF; /* Sky Blue */
+            --secondary: #FF69B4; /* Pink */
+            --accent: #FFEB3B; /* Lemon Yellow */
+            --light: #FFFFFF; /* White */
+            --dark: #212529;
+            --success: #4ade80;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray: #6c757d;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #333;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            --primary: #00BFFF;
+            --secondary: #4a1bc5;
+            --accent: #5fd4f8;
+            --light: #1a1a1a;
+            --dark: #f8f9fa;
+            --card-bg: rgba(30, 30, 30, 0.95);
+            --text: #f0f0f0;
+            --shadow: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background: linear-gradient(135deg, #00BFFF 0%, #FF69B4 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #23628d 0%, #8e3a64 100%);
+        }
+
+        /* Floating Background Objects */
+        .floating-objects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-object {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        .floating-object:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-duration: 20s;
+        }
+
+        .floating-object:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-duration: 25s;
+        }
+
+        .floating-object:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 20%;
+            animation-duration: 15s;
+        }
+
+        .floating-object:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 30%;
+            left: 70%;
+            animation-duration: 30s;
+        }
+
+        .floating-object:nth-child(5) {
+            width: 70px;
+            height: 70px;
+            top: 50%;
+            left: 40%;
+            animation-duration: 18s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(20px, 40px) rotate(90deg);
+            }
+            50% {
+                transform: translate(40px, 0) rotate(180deg);
+            }
+            75% {
+                transform: translate(20px, -40px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 80px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+            border-radius: 10%;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        .theme-toggle:hover {
+            background: var(--secondary);
+        }
+
+        /* Banner Section */
+        .banner {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            text-align: center;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .card-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Planner Specific Styles */
+        .planner-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .planner-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+
+        .btn-outline {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        } .btn-outline {
+        background-color: transparent;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-block;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            opacity: 0.9;
+        }
+
+        .btn-warning {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            opacity: 0.9;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            opacity: 0.9;
+        }
+
+        .planner-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .planner-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .calendar-container {
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .dark-mode .calendar-container {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .calendar-nav-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-nav-btn:hover {
+            background: var(--secondary);
+        }
+
+        .calendar-month {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .calendar-day:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .calendar-day.other-month {
+            color: var(--gray);
+        }
+
+        .calendar-day.today {
+            background-color: var(--accent);
+            color: var(--dark);
+        }
+
+        .calendar-day.selected {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .calendar-day.has-sessions {
+            position: relative;
+        }
+
+        .calendar-day.has-sessions::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+        }
+
+        .sessions-container {
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        .dark-mode .sessions-container {
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .sessions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .session-item {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .session-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+
+        .session-info {
+            flex: 1;
+        }
+
+        .session-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .session-details {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .session-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .session-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .session-btn.edit {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .session-btn.delete {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .session-btn.complete {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .session-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dark-mode .modal-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            background-color: var(--light);
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .dark-mode .form-input, 
+        .dark-mode .form-select, 
+        .dark-mode .form-textarea {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(50, 50, 50, 0.7);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .dark-mode .modal-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 2rem 2rem 1rem;
+            margin-top: 1rem;
+            box-shadow: 0 -4px 6px var(--shadow);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo .logo img {
+            width: 70px;
+            height: auto;
+            margin-bottom: 0;
+        }
+
+        .footer-logo .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .footer-about {
+            line-height: 1.6;
+            color: var(--gray);
+            max-width: 400px;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-contact p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dark-mode .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text);
+            font-size: 1.2rem;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .planner-actions {
+                flex-direction: column;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Objects -->
+    <div class="floating-objects">
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+        <div class="floating-object"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo-container">
+            <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+            <div class="logo-text">Smart Study Planner</div>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html">Dashboard</a>
+            <a href="about.html">About</a>
+            <a href="tasks.html">My Tasks</a>
+            <a href="goals.html">Study Goals</a>
+            <a href="resources.html">Resources</a>
+            <a href="progress.html">Progress</a>
+        </nav>
+        <div class="nav-controls">
+            <a href="login.html" class="btn btn-outline" id="loginBtn">Login</a>
+            <a href="signup.html" class="btn btn-primary" id="signupBtn">Sign Up</a>
+            <button class="theme-toggle" id="themeToggle">
+                <span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Banner Section -->
+    <div class="container">
+        <div class="banner">
+            <h1>Study Planner</h1>
+            <p>Organize your study sessions effectively with our smart planner. Schedule your study time, set goals, and track your progress to maximize your academic performance.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">Plan Your Study Sessions</h1>
+        
+        <!-- Planner Actions -->
+         <div class="planner-actions">
+            <button class="planner-btn btn-success" id="addSessionBtn">
+                <i class="fas fa-plus"></i> Add Study Session
+            </button>
+        </div>
+
+        <!-- Planner Content -->
+        <div class="planner-grid">
+            <!-- Calendar Section -->
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <div class="calendar-nav">
+                        <button class="calendar-nav-btn" id="prevMonthBtn">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="calendar-nav-btn" id="nextMonthBtn">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="calendar-month" id="currentMonth">June 2023</div>
+                </div>
+                <div class="calendar-weekdays">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div class="calendar-days" id="calendarDays">
+                    <!-- Calendar days will be generated dynamically -->
+                </div>
+            </div>
+
+            <!-- Sessions Section -->
+            <div class="sessions-container">
+                <div class="card-header">
+                    <h2 class="card-title">Study Sessions</h2>
+                    <div id="selectedDate">Today</div>
+                </div>
+                <div class="sessions-list" id="sessionsList">
+                    <!-- Sessions will be dynamically added here -->
+                    <div class="empty-state" id="emptyState">
+                        <i class="fas fa-calendar-plus"></i>
+                        <h3>No study sessions planned</h3>
+                        <p>Add your first study session using the button above.</p>
+                    </div>
+                </div>
+            </div>
+        </div><br><br>
+
+        <!-- Weekly Overview -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Weekly Study Overview</h2>
+            </div>
+            <div class="weekly-overview" id="weeklyOverview">
+                <!-- Weekly overview will be generated dynamically -->
+                <div class="empty-state">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>No study data available</h3>
+                    <p>Start adding study sessions to see your weekly overview.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Session Modal -->
+    <div class="modal" id="sessionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add Study Session</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="sessionForm">
+                    <input type="hidden" id="sessionId">
+                    <div class="form-group">
+                        <label class="form-label" for="sessionTitle">Session Title</label>
+                        <input type="text" class="form-input" id="sessionTitle" placeholder="Enter session title" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="sessionSubject">Subject</label>
+                        <select class="form-select" id="sessionSubject" required>
+                            <option value="">Select subject</option>
+                            <option value="mathematics">Mathematics</option>
+                            <option value="science">Science</option>
+                            <option value="history">History</option>
+                            <option value="literature">Literature</option>
+                            <option value="language">Language</option>
+                            <option value="computer-science">Computer Science</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="sessionDate">Date</label>
+                            <input type="date" class="form-input" id="sessionDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="sessionTime">Time</label>
+                            <input type="time" class="form-input" id="sessionTime" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="sessionDuration">Duration (minutes)</label>
+                            <input type="number" class="form-input" id="sessionDuration" min="15" max="240" value="60" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="sessionPriority">Priority</label>
+                            <select class="form-select" id="sessionPriority" required>
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="sessionDescription">Description</label>
+                        <textarea class="form-textarea" id="sessionDescription" placeholder="Enter session details"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="planner-btn btn-outline" id="cancelBtn">Cancel</button>
+                <button type="button" class="planner-btn btn-primary" id="saveSessionBtn">Save Session</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <div class="logo"><img src="logo.png" alt="Smart Study Planner Logo"></div>
+                    <div class="logo-text">Smart Study Planner</div>
+                </div>
+                <p class="footer-about">
+                    Smart Study Planner is an innovative tool designed to help students organize their academic life efficiently. 
+                    With intuitive task management, progress tracking, and smart reminders, our platform empowers students to 
+                    achieve their academic goals while maintaining a healthy study-life balance.
+                </p>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Quick Links</h3>
+                <div class="footer-links">
+                    <a href="about.html">About Us</a>
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="testimonials.html">Testimonials</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Resources</h3>
+                <div class="footer-links">
+                    <a href="studytips.html">Study Tips</a>
+                    <a href="time.html">Time Management</a>
+                    <a href="productivity.html">Productivity Tools</a>
+                    <a href="academic.html">Academic Resources</a>
+                    <a href="support.html">Support Center</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Contact Us</h3>
+                <div class="footer-contact">
+                    <p><i class="fas fa-envelope"></i> info@smartstudyplanner.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Education Street, Learning City</p>
+                </div>
+                <div class="social-links">
+                    <a href="www.facebook.com" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="www.twitter.com" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="www.instagram.com" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="www.linkedin.com" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; 2025 Smart Study Planner. All rights reserved.
+            </div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="cookie.html">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+        const addSessionBtn = document.getElementById('addSessionBtn');
+        const sessionModal = document.getElementById('sessionModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalClose = document.getElementById('modalClose');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const saveSessionBtn = document.getElementById('saveSessionBtn');
+        const sessionForm = document.getElementById('sessionForm');
+        const sessionsList = document.getElementById('sessionsList');
+        const emptyState = document.getElementById('emptyState');
+        const selectedDate = document.getElementById('selectedDate');
+        const calendarDays = document.getElementById('calendarDays');
+        const currentMonth = document.getElementById('currentMonth');
+        const prevMonthBtn = document.getElementById('prevMonthBtn');
+        const nextMonthBtn = document.getElementById('nextMonthBtn');
+
+        // Calendar and Session Data
+        let currentDate = new Date();
+        let selectedCalendarDate = new Date();
+        let sessions = [];
+        let editingSessionId = null;
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            }
+            saveToLocalStorage('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+
+        // Modal Functions
+        addSessionBtn.addEventListener('click', () => {
+            editingSessionId = null;
+            modalTitle.textContent = 'Add Study Session';
+            sessionForm.reset();
+            document.getElementById('sessionDate').value = formatDateForInput(selectedCalendarDate);
+            sessionModal.style.display = 'flex';
+        });
+
+        modalClose.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+
+        function closeModal() {
+            sessionModal.style.display = 'none';
+        }
+
+        // Save Session
+        saveSessionBtn.addEventListener('click', () => {
+            if (!sessionForm.checkValidity()) {
+                sessionForm.reportValidity();
+                return;
+            }
+
+            const sessionData = {
+                id: editingSessionId || Date.now(),
+                title: document.getElementById('sessionTitle').value,
+                subject: document.getElementById('sessionSubject').value,
+                date: document.getElementById('sessionDate').value,
+                time: document.getElementById('sessionTime').value,
+                duration: parseInt(document.getElementById('sessionDuration').value),
+                priority: document.getElementById('sessionPriority').value,
+                description: document.getElementById('sessionDescription').value,
+                completed: false
+            };
+
+            if (editingSessionId) {
+                // Update existing session
+                sessions = sessions.map(session => 
+                    session.id === editingSessionId ? sessionData : session
+                );
+            } else {
+                // Add new session
+                sessions.push(sessionData);
+            }
+
+            saveToLocalStorage('sessions', sessions);
+            renderSessions();
+            renderCalendar();
+            closeModal();
+        });
+
+        // Render Sessions
+        function renderSessions() {
+            const dateSessions = sessions.filter(session => 
+                session.date === formatDateForInput(selectedCalendarDate)
+            );
+
+            if (dateSessions.length === 0) {
+                sessionsList.innerHTML = '';
+                sessionsList.appendChild(emptyState);
+                return;
+            }
+
+            sessionsList.innerHTML = dateSessions.map(session => `
+                <div class="session-item" data-id="${session.id}">
+                    <div class="session-info">
+                        <div class="session-title">${session.title}</div>
+                        <div class="session-details">
+                            <span><i class="fas fa-book"></i> ${formatSubject(session.subject)}</span>
+                            <span><i class="fas fa-clock"></i> ${session.time} (${session.duration} min)</span>
+                            <span class="priority-${session.priority}"><i class="fas fa-flag"></i> ${session.priority}</span>
+                        </div>
+                    </div>
+                    <div class="session-actions">
+                        <button class="session-btn complete" onclick="toggleSessionCompletion(${session.id})" title="Mark as completed">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="session-btn edit" onclick="editSession(${session.id})" title="Edit session">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="session-btn delete" onclick="deleteSession(${session.id})" title="Delete session">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Edit Session
+        function editSession(id) {
+            const session = sessions.find(s => s.id === id);
+            if (!session) return;
+
+            editingSessionId = id;
+            modalTitle.textContent = 'Edit Study Session';
+            document.getElementById('sessionId').value = session.id;
+            document.getElementById('sessionTitle').value = session.title;
+            document.getElementById('sessionSubject').value = session.subject;
+            document.getElementById('sessionDate').value = session.date;
+            document.getElementById('sessionTime').value = session.time;
+            document.getElementById('sessionDuration').value = session.duration;
+            document.getElementById('sessionPriority').value = session.priority;
+            document.getElementById('sessionDescription').value = session.description;
+            sessionModal.style.display = 'flex';
+        }
+
+        // Delete Session
+        function deleteSession(id) {
+            if (confirm('Are you sure you want to delete this study session?')) {
+                sessions = sessions.filter(session => session.id !== id);
+                saveToLocalStorage('sessions', sessions);
+                renderSessions();
+                renderCalendar();
+            }
+        }
+
+        // Toggle Session Completion
+        function toggleSessionCompletion(id) {
+            sessions = sessions.map(session => 
+                session.id === id ? { ...session, completed: !session.completed } : session
+            );
+            saveToLocalStorage('sessions', sessions);
+            renderSessions();
+            renderCalendar();
+        }
+
+        // Calendar Functions
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            currentMonth.textContent = currentDate.toLocaleDateString('en-US', { 
+                month: 'long', 
+                year: 'numeric' 
+            });
+
+            // Get first day of month and number of days
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            
+            // Get day of week for first day (0 = Sunday, 6 = Saturday)
+            const firstDayIndex = firstDay.getDay();
+            
+            // Get last day of previous month
+            const prevLastDay = new Date(year, month, 0).getDate();
+            
+            calendarDays.innerHTML = '';
+            
+            // Previous month days
+            for (let i = firstDayIndex; i > 0; i--) {
+                const day = prevLastDay - i + 1;
+                const date = new Date(year, month - 1, day);
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day other-month';
+                dayElement.textContent = day;
+                dayElement.addEventListener('click', () => selectDate(date));
+                calendarDays.appendChild(dayElement);
+            }
+            
+            // Current month days
+            for (let i = 1; i <= daysInMonth; i++) {
+                const date = new Date(year, month, i);
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = i;
+                
+                // Check if this date has sessions
+                const dateSessions = sessions.filter(session => 
+                    session.date === formatDateForInput(date)
+                );
+                
+                if (dateSessions.length > 0) {
+                    dayElement.classList.add('has-sessions');
+                }
+                
+                // Check if this is today
+                if (isToday(date)) {
+                    dayElement.classList.add('today');
+                }
+                
+                // Check if this is the selected date
+                if (isSameDate(date, selectedCalendarDate)) {
+                    dayElement.classList.add('selected');
+                }
+                
+                dayElement.addEventListener('click', () => selectDate(date));
+                calendarDays.appendChild(dayElement);
+            }
+            
+            // Next month days
+            const nextDays = 42 - (firstDayIndex + daysInMonth); // 6 rows of 7 days
+            for (let i = 1; i <= nextDays; i++) {
+                const date = new Date(year, month + 1, i);
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day other-month';
+                dayElement.textContent = i;
+                dayElement.addEventListener('click', () => selectDate(date));
+                calendarDays.appendChild(dayElement);
+            }
+        }
+
+        function selectDate(date) {
+            selectedCalendarDate = date;
+            selectedDate.textContent = date.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            renderSessions();
+            renderCalendar();
+        }
+
+        function isToday(date) {
+            const today = new Date();
+            return date.getDate() === today.getDate() &&
+                   date.getMonth() === today.getMonth() &&
+                   date.getFullYear() === today.getFullYear();
+        }
+
+        function isSameDate(date1, date2) {
+            return date1.getDate() === date2.getDate() &&
+                   date1.getMonth() === date2.getMonth() &&
+                   date1.getFullYear() === date2.getFullYear();
+        }
+
+        // Calendar Navigation
+        prevMonthBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        });
+
+        nextMonthBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        });
+
+        // Utility Functions
+        function formatDateForInput(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        function formatSubject(subject) {
+            return subject.split('-').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+        }
+
+        function saveToLocalStorage(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function getFromLocalStorage(key) {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : null;
+        }
+
+        // Initialize Page
+        function init() {
+            // Load saved theme
+            const savedTheme = getFromLocalStorage('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            }
+
+            // Load saved sessions
+            const savedSessions = getFromLocalStorage('sessions') || [];
+            sessions = savedSessions;
+
+            // Set initial selected date to today
+            selectedDate.textContent = selectedCalendarDate.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+
+            // Render calendar and sessions
+            renderCalendar();
+            renderSessions();
+        }
+
+        // Initialize the page
+        init();
+    </script>
+</body>
+</html>

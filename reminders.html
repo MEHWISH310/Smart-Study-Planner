@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Tips - Smart Study Planner</title>
+    <title>Reminders - Smart Study Planner</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -280,154 +280,259 @@
             color: var(--primary);
         }
 
-        /* Study Tips Grid */
-        .tips-grid {
+        /* Reminders Specific Styles */
+        .reminder-form {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
-        .tip-card {
-            background-color: var(--light);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px var(--shadow);
-            transition: transform 0.3s ease;
-        }
-
-        .dark-mode .tip-card {
-            background-color: rgba(50, 50, 50, 0.7);
-        }
-
-        .tip-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .tip-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-
-        .tip-content h3 {
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-        }
-
-        .tip-content p {
-            color: var(--text);
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        /* Study Techniques Section */
-        .techniques-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .technique-card {
-            background-color: var(--light);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px var(--shadow);
+        .form-group {
             display: flex;
             flex-direction: column;
+            gap: 0.5rem;
         }
 
-        .dark-mode .technique-card {
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-input, .form-select, .form-textarea {
+            padding: 0.75rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            background-color: var(--light);
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .dark-mode .form-input, 
+        .dark-mode .form-select, 
+        .dark-mode .form-textarea {
+            border: 1px solid rgba(255, 255, 255, 0.1);
             background-color: rgba(50, 50, 50, 0.7);
         }
 
-        .technique-header {
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            grid-column: 1 / -1;
             display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .technique-icon {
-            font-size: 2rem;
-            color: var(--primary);
-            background: rgba(0, 191, 255, 0.1);
-            padding: 1rem;
-            border-radius: 50%;
-            margin-right: 1rem;
-        }
-
-        .technique-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .technique-steps {
+            justify-content: flex-end;
+            gap: 1rem;
             margin-top: 1rem;
         }
 
-        .technique-steps ol {
-            padding-left: 1.5rem;
-            line-height: 1.6;
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
         }
 
-        .technique-steps li {
-            margin-bottom: 0.5rem;
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
         }
 
-        /* Resources Section */
-        .resources-list {
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            opacity: 0.9;
+        }
+
+        .reminder-list {
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
 
-        .resource-item {
-            display: flex;
-            align-items: center;
-            padding: 1rem;
+        .reminder-item {
             background-color: var(--light);
-            border-radius: 8px;
-            box-shadow: 0 2px 4px var(--shadow);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        .dark-mode .resource-item {
+        .dark-mode .reminder-item {
             background-color: rgba(50, 50, 50, 0.7);
         }
 
-        .resource-icon {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-right: 1rem;
-            width: 40px;
-            text-align: center;
+        .reminder-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px var(--shadow);
         }
 
-        .resource-content {
+        .reminder-content {
             flex: 1;
         }
 
-        .resource-content h4 {
-            margin-bottom: 0.25rem;
+        .reminder-title {
+            font-size: 1.2rem;
+            font-weight: 600;
             color: var(--primary);
+            margin-bottom: 0.5rem;
         }
 
-        .resource-content p {
-            font-size: 0.9rem;
+        .reminder-description {
             color: var(--text);
+            margin-bottom: 0.75rem;
         }
 
-        .resource-link {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
-            display: inline-flex;
+        .reminder-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .reminder-meta-item {
+            display: flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.5rem;
         }
 
-        .resource-link:hover {
-            color: var(--secondary);
+        .reminder-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .reminder-btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+
+        .reminder-btn.edit {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .reminder-btn.delete {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .reminder-btn.complete {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .reminder-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        .reminder-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .status-pending {
+            background-color: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .status-completed {
+            background-color: rgba(74, 222, 128, 0.2);
+            color: var(--success);
+        }
+
+        .status-overdue {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--primary);
+            border-radius: 20px;
+            background-color: transparent;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .filter-btn:hover {
+            background-color: var(--primary);
+            color: white;
         }
 
         /* Footer */
@@ -547,17 +652,8 @@
 
         /* Responsive Design */
         @media (max-width: 1024px) {
-            .mission-content {
-                flex-direction: column;
-            }
-            
-            .creator-section {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .creator-contact {
-                justify-content: center;
+            .reminder-form {
+                grid-template-columns: 1fr;
             }
         }
         
@@ -582,16 +678,13 @@
                 text-align: center;
             }
             
-            .values-grid {
-                grid-template-columns: 1fr;
+            .reminder-item {
+                flex-direction: column;
+                gap: 1rem;
             }
             
-            .tips-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .techniques-grid {
-                grid-template-columns: 1fr;
+            .reminder-actions {
+                align-self: flex-end;
             }
         }
         
@@ -673,194 +766,74 @@
     <!-- Banner Section -->
     <div class="container">
         <div class="banner">
-            <h1>Study Tips & Techniques</h1>
-            <p>Discover proven strategies to enhance your learning efficiency, improve retention, and make the most of your study sessions. These tips are designed to help you study smarter, not harder.</p>
+            <h1>Reminders</h1>
+            <p>Never miss an important deadline or study session again. Set up custom reminders for assignments, exams, and study goals to stay on track with your academic journey.</p>
         </div>
     </div>
 
     <!-- Main Content -->
     <div class="container">
-        <h1 class="page-title">Effective Study Strategies</h1>
+        <h1 class="page-title">Manage Your Reminders</h1>
         
-        <!-- Essential Study Tips -->
+        <!-- Add Reminder Form -->
         <div class="card">
             <div class="card-header">
-                <h2 class="card-title">Essential Study Tips</h2>
+                <h2 class="card-title">Add New Reminder</h2>
             </div>
-            <div class="tips-grid">
-                <div class="tip-card">
-                    <div class="tip-icon">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="tip-content">
-                        <h3>Time Management</h3>
-                        <p>Create a study schedule that allocates specific time blocks for each subject. Use techniques like the Pomodoro method (25 minutes focused study, 5-minute breaks) to maintain concentration.</p>
-                    </div>
+            <form class="reminder-form" id="reminderForm">
+                <div class="form-group">
+                    <label class="form-label" for="reminderTitle">Title</label>
+                    <input type="text" class="form-input" id="reminderTitle" placeholder="Enter reminder title" required>
                 </div>
-                <div class="tip-card">
-                    <div class="tip-icon">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <div class="tip-content">
-                        <h3>Active Learning</h3>
-                        <p>Don't just passively read. Engage with the material by summarizing, questioning, and teaching concepts to others. This deepens understanding and improves retention.</p>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label" for="reminderDate">Date</label>
+                    <input type="date" class="form-input" id="reminderDate" required>
                 </div>
-                <div class="tip-card">
-                    <div class="tip-icon">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <div class="tip-content">
-                        <h3>Spaced Repetition</h3>
-                        <p>Review material at increasing intervals over time. This technique is proven to enhance long-term memory retention compared to cramming.</p>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label" for="reminderTime">Time</label>
+                    <input type="time" class="form-input" id="reminderTime" required>
                 </div>
-                <div class="tip-card">
-                    <div class="tip-icon">
-                        <i class="fas fa-bed"></i>
-                    </div>
-                    <div class="tip-content">
-                        <h3>Quality Sleep</h3>
-                        <p>Prioritize 7-9 hours of sleep per night. Sleep is crucial for memory consolidation and cognitive function. Avoid all-nighters before exams.</p>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label" for="reminderType">Type</label>
+                    <select class="form-select" id="reminderType" required>
+                        <option value="">Select type</option>
+                        <option value="assignment">Assignment</option>
+                        <option value="exam">Exam</option>
+                        <option value="study">Study Session</option>
+                        <option value="meeting">Meeting</option>
+                        <option value="personal">Personal</option>
+                    </select>
                 </div>
-                <div class="tip-card">
-                    <div class="tip-icon">
-                        <i class="fas fa-utensils"></i>
-                    </div>
-                    <div class="tip-content">
-                        <h3>Healthy Nutrition</h3>
-                        <p>Fuel your brain with balanced meals and stay hydrated. Omega-3 fatty acids, antioxidants, and complex carbohydrates support optimal brain function.</p>
-                    </div>
+                <div class="form-group full-width">
+                    <label class="form-label" for="reminderDescription">Description</label>
+                    <textarea class="form-textarea" id="reminderDescription" placeholder="Enter reminder details"></textarea>
                 </div>
-                <div class="tip-card">
-                    <div class="tip-icon">
-                        <i class="fas fa-dumbbell"></i>
-                    </div>
-                    <div class="tip-content">
-                        <h3>Physical Activity</h3>
-                        <p>Regular exercise increases blood flow to the brain, improving concentration and memory. Even short walks during study breaks can boost performance.</p>
-                    </div>
+                <div class="form-actions">
+                    <button type="reset" class="btn btn-outline">Clear</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Reminder
+                    </button>
                 </div>
-            </div>
+            </form>
         </div>
 
-        <!-- Study Techniques -->
+        <!-- Reminders List -->
         <div class="card">
             <div class="card-header">
-                <h2 class="card-title">Proven Study Techniques</h2>
-            </div>
-            <div class="techniques-grid">
-                <div class="technique-card">
-                    <div class="technique-header">
-                        <div class="technique-icon">
-                            <i class="fas fa-puzzle-piece"></i>
-                        </div>
-                        <div class="technique-title">Feynman Technique</div>
-                    </div>
-                    <p>Simplify complex concepts by explaining them in plain language as if teaching someone else.</p>
-                    <div class="technique-steps">
-                        <ol>
-                            <li>Choose a concept to learn</li>
-                            <li>Explain it in simple terms</li>
-                            <li>Identify gaps in your explanation</li>
-                            <li>Review and simplify further</li>
-                        </ol>
-                    </div>
-                </div>
-                <div class="technique-card">
-                    <div class="technique-header">
-                        <div class="technique-icon">
-                            <i class="fas fa-layer-group"></i>
-                        </div>
-                        <div class="technique-title">SQ3R Method</div>
-                    </div>
-                    <p>A reading comprehension method that improves understanding and retention of written material.</p>
-                    <div class="technique-steps">
-                        <ol>
-                            <li><strong>Survey:</strong> Skim the material</li>
-                            <li><strong>Question:</strong> Form questions</li>
-                            <li><strong>Read:</strong> Actively read for answers</li>
-                            <li><strong>Recite:</strong> Summarize in your own words</li>
-                            <li><strong>Review:</strong> Check your understanding</li>
-                        </ol>
-                    </div>
-                </div>
-                <div class="technique-card">
-                    <div class="technique-header">
-                        <div class="technique-icon">
-                            <i class="fas fa-sitemap"></i>
-                        </div>
-                        <div class="technique-title">Mind Mapping</div>
-                    </div>
-                    <p>Visual organization of information that shows relationships between concepts.</p>
-                    <div class="technique-steps">
-                        <ol>
-                            <li>Start with a central concept</li>
-                            <li>Add branches for main ideas</li>
-                            <li>Include sub-branches for details</li>
-                            <li>Use colors and images to enhance memory</li>
-                        </ol>
-                    </div>
+                <h2 class="card-title">Your Reminders</h2>
+                <div class="filter-controls">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="pending">Pending</button>
+                    <button class="filter-btn" data-filter="completed">Completed</button>
+                    <button class="filter-btn" data-filter="overdue">Overdue</button>
                 </div>
             </div>
-        </div>
-
-        <!-- Exam Preparation -->
-        <div class="card">
-            <div class="card-header">
-                <h2 class="card-title">Exam Preparation Strategies</h2>
-            </div>
-            <div class="mission-content">
-                <div class="mission-text">
-                    <p>Effective exam preparation goes beyond simply reviewing material. Implement these strategies to maximize your performance:</p>
-                    <br>
-                    <ul style="padding-left: 1.5rem; line-height: 1.8;">
-                        <li><strong>Start Early:</strong> Begin studying at least 2-3 weeks before major exams to avoid cramming.</li>
-                        <li><strong>Practice Retrieval:</strong> Test yourself regularly with practice questions and past papers.</li>
-                        <li><strong>Create Study Guides:</strong> Condense information into concise summaries or flashcards.</li>
-                        <li><strong>Form Study Groups:</strong> Collaborate with peers to explain concepts and fill knowledge gaps.</li>
-                        <li><strong>Simulate Exam Conditions:</strong> Practice under timed conditions to build confidence.</li>
-                        <li><strong>Focus on Weak Areas:</strong> Allocate more time to topics you find challenging.</li>
-                    </ul>
-                    <br>
-                    <p>Remember to take care of your physical and mental health during exam periods. Proper nutrition, exercise, and adequate sleep are just as important as study time.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Additional Resources -->
-        <div class="card">
-            <div class="card-header">
-                <h2 class="card-title">Additional Resources</h2>
-            </div>
-            <div class="resources-list">
-                <div class="resource-item">
-                    <div class="resource-icon">
-                        <i class="fas fa-book-open"></i>
-                    </div>
-                    <div class="resource-content">
-                        <h4>How to Become a Straight-A Student</h4>
-                        <p>Book by Cal Newport with practical strategies for academic success.</p>
-                    </div>
-                </div>
-                <div class="resource-item">
-                    <div class="resource-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <div class="resource-content">
-                        <h4>Learning How to Learn</h4>
-                        <p>Popular online course covering powerful mental tools to master tough subjects.</p>
-                    </div>
-                </div>
-                <div class="resource-item">
-                    <div class="resource-icon">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <div class="resource-content">
-                        <h4>Memory Techniques Guide</h4>
-                        <p>Comprehensive guide to mnemonic devices and memory improvement strategies.</p>
-                    </div>
+            <div class="reminder-list" id="reminderList">
+                <!-- Reminders will be dynamically added here -->
+                <div class="empty-state" id="emptyState">
+                    <i class="fas fa-bell-slash"></i>
+                    <h3>No reminders yet</h3>
+                    <p>Create your first reminder using the form above.</p>
                 </div>
             </div>
         </div>
@@ -936,6 +909,14 @@
         const themeToggle = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
         const themeText = document.getElementById('themeText');
+        const reminderForm = document.getElementById('reminderForm');
+        const reminderList = document.getElementById('reminderList');
+        const emptyState = document.getElementById('emptyState');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        // Reminder Data
+        let reminders = [];
+        let currentFilter = 'all';
 
         // Theme Toggle
         themeToggle.addEventListener('click', () => {
@@ -950,15 +931,188 @@
             saveToLocalStorage('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
         });
 
-        // Load saved theme
-        const savedTheme = getFromLocalStorage('theme');
-        if (savedTheme === 'dark') {
-            document.body.classList.add('dark-mode');
-            themeIcon.textContent = '☀️';
-            themeText.textContent = 'Light Mode';
+        // Form Submission
+        reminderForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('reminderTitle').value;
+            const date = document.getElementById('reminderDate').value;
+            const time = document.getElementById('reminderTime').value;
+            const type = document.getElementById('reminderType').value;
+            const description = document.getElementById('reminderDescription').value;
+            
+            const newReminder = {
+                id: Date.now(),
+                title,
+                date,
+                time,
+                type,
+                description,
+                status: 'pending',
+                createdAt: new Date().toISOString()
+            };
+            
+            reminders.push(newReminder);
+            saveToLocalStorage('reminders', reminders);
+            renderReminders();
+            reminderForm.reset();
+            
+            // Show success message
+            alert('Reminder added successfully!');
+        });
+
+        // Render Reminders
+        function renderReminders() {
+            const filteredReminders = filterReminders(reminders, currentFilter);
+            
+            if (filteredReminders.length === 0) {
+                reminderList.innerHTML = '';
+                reminderList.appendChild(emptyState);
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            
+            reminderList.innerHTML = filteredReminders.map(reminder => {
+                const reminderDate = new Date(`${reminder.date}T${reminder.time}`);
+                const now = new Date();
+                const isOverdue = reminderDate < now && reminder.status === 'pending';
+                const statusClass = isOverdue ? 'status-overdue' : 
+                                  reminder.status === 'completed' ? 'status-completed' : 'status-pending';
+                const statusText = isOverdue ? 'Overdue' : 
+                                 reminder.status === 'completed' ? 'Completed' : 'Pending';
+                
+                return `
+                    <div class="reminder-item" data-id="${reminder.id}">
+                        <div class="reminder-content">
+                            <h3 class="reminder-title">${reminder.title}</h3>
+                            <p class="reminder-description">${reminder.description || 'No description provided'}</p>
+                            <div class="reminder-meta">
+                                <div class="reminder-meta-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>${formatDate(reminder.date)}</span>
+                                </div>
+                                <div class="reminder-meta-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>${formatTime(reminder.time)}</span>
+                                </div>
+                                <div class="reminder-meta-item">
+                                    <i class="fas fa-tag"></i>
+                                    <span>${capitalizeFirstLetter(reminder.type)}</span>
+                                </div>
+                            </div>
+                            <div class="reminder-status ${statusClass}">${statusText}</div>
+                        </div>
+                        <div class="reminder-actions">
+                            ${reminder.status !== 'completed' ? `
+                                <button class="reminder-btn complete" onclick="completeReminder(${reminder.id})" title="Mark as completed">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            ` : ''}
+                            <button class="reminder-btn edit" onclick="editReminder(${reminder.id})" title="Edit reminder">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="reminder-btn delete" onclick="deleteReminder(${reminder.id})" title="Delete reminder">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
-        // Utility functions
+        // Filter Reminders
+        function filterReminders(reminders, filter) {
+            const now = new Date();
+            
+            switch(filter) {
+                case 'pending':
+                    return reminders.filter(reminder => {
+                        const reminderDate = new Date(`${reminder.date}T${reminder.time}`);
+                        return reminder.status === 'pending' && reminderDate >= now;
+                    });
+                case 'completed':
+                    return reminders.filter(reminder => reminder.status === 'completed');
+                case 'overdue':
+                    return reminders.filter(reminder => {
+                        const reminderDate = new Date(`${reminder.date}T${reminder.time}`);
+                        return reminder.status === 'pending' && reminderDate < now;
+                    });
+                default:
+                    return reminders;
+            }
+        }
+
+        // Filter Button Event Listeners
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                renderReminders();
+            });
+        });
+
+        // Complete Reminder
+        function completeReminder(id) {
+            reminders = reminders.map(reminder => {
+                if (reminder.id === id) {
+                    return { ...reminder, status: 'completed' };
+                }
+                return reminder;
+            });
+            saveToLocalStorage('reminders', reminders);
+            renderReminders();
+        }
+
+        // Edit Reminder
+        function editReminder(id) {
+            const reminder = reminders.find(r => r.id === id);
+            if (!reminder) return;
+            
+            document.getElementById('reminderTitle').value = reminder.title;
+            document.getElementById('reminderDate').value = reminder.date;
+            document.getElementById('reminderTime').value = reminder.time;
+            document.getElementById('reminderType').value = reminder.type;
+            document.getElementById('reminderDescription').value = reminder.description;
+            
+            // Remove the reminder from the list
+            reminders = reminders.filter(r => r.id !== id);
+            saveToLocalStorage('reminders', reminders);
+            renderReminders();
+            
+            // Scroll to form
+            document.getElementById('reminderForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Delete Reminder
+        function deleteReminder(id) {
+            if (confirm('Are you sure you want to delete this reminder?')) {
+                reminders = reminders.filter(reminder => reminder.id !== id);
+                saveToLocalStorage('reminders', reminders);
+                renderReminders();
+            }
+        }
+
+        // Utility Functions
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        function formatTime(timeString) {
+            const [hours, minutes] = timeString.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const formattedHour = hour % 12 || 12;
+            return `${formattedHour}:${minutes} ${ampm}`;
+        }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
         function saveToLocalStorage(key, value) {
             localStorage.setItem(key, JSON.stringify(value));
         }
@@ -967,6 +1121,25 @@
             const item = localStorage.getItem(key);
             return item ? JSON.parse(item) : null;
         }
+
+        // Initialize Page
+        function init() {
+            // Load saved theme
+            const savedTheme = getFromLocalStorage('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            }
+
+            // Load saved reminders
+            const savedReminders = getFromLocalStorage('reminders') || [];
+            reminders = savedReminders;
+            renderReminders();
+        }
+
+        // Initialize the page
+        init();
     </script>
 </body>
 </html>
